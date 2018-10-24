@@ -7,7 +7,7 @@
 	set_time_limit(0);
 
 	define("DB_TYPE", "mysql");
-	define("DB_HOST", "127.0.0.1");
+	define("DB_HOST", "localhost");
 	define("DB_NAME", "linkedin_profiles");
 	define("DB_USER", "root");
 
@@ -25,10 +25,17 @@
 
 	function registerUser($_Name, $_SurName, $_email, $_pass) {
 		global $db;
-		$data = md5($_pass, "65416");
-		$sql = "INSERT INTO users (Name, SurName, Email, Password) VALUES ( ?, ?, ?, ?)";
-		$stmt= $db->prepare($sql);
-		$stmt->execute([$_Name, $_SurName, $_email, $data]);
+		print_r($db);
+		$sql = "select Id from users where Email = '$_email'";
+		$result = $db->select($sql);
+		if( $result == false){
+			$data = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
+			$sql = "INSERT INTO users(Name, SureName, Email, Password) VALUES ( ?, ?, ?, ?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$_Name, $_SurName, $_email, $data]);
+			return true;
+		}
+		return false;
 	}
 
 	function verifyUser($_email, $_pass) {

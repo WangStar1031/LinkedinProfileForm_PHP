@@ -6,30 +6,22 @@ $_lastName = "";
 
 require_once 'library/userManager.php';
 if( isset($_POST['email_name'])){
-  $email_name = $_POST['email_name'];
-  if( isset($_POST['password'])){
-    $password = $_POST['password'];
-  }
-  $userVeri = createUser($_firstName, $_lastName, $email_name, $password);
-  if( $userVeri != false){
-    session_start();
-    $_SESSION['userEmail'] = $userVeri;
-    header("Location: index.php");
-  }
+	$email_name = $_POST['email_name'];
+	$password = $_POST['password'];
+	$_firstName = $_POST['first_name'];
+	$_lastName = $_POST['first_name'];
+	$ret = registerUser($_firstName, $_lastName, $email_name, $password);
+	if( $ret != false){
+		header("Location: index.php");
+	}
 }
 ?>
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Node.sg</title>
-
-  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/css/auth.css">
-  <link rel="icon" type="image/png" href="assets/imgs/vision-logo.png">
-</head>
+<?php
+include("assets/components/header.php");
+?>
 <script src="assets/js/jquery.min.js"></script>
 <!-- <script src="assets/js/bootstrap.min.js"></script> -->
 
