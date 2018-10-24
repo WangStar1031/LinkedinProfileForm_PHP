@@ -2,6 +2,7 @@
 $email_name = "";
 $password = "";
 $userVeri = true;
+
 if( isset($_POST['email_name'])){
   $email_name = $_POST['email_name'];
   if( isset($_POST['password'])){
@@ -9,7 +10,7 @@ if( isset($_POST['email_name'])){
   }
   require_once 'library/userManager.php';
   $userVeri = verifyUser($email_name, $password);
-  if( $userVeri != false){
+  if( $userVeri == 1){
     session_start();
     $_SESSION['userEmail'] = $email_name;
     header("Location: index.php");

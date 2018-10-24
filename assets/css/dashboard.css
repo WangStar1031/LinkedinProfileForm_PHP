@@ -1,3 +1,6 @@
+body{
+	font-family: 'Raleway', sans-serif;
+}
 .mainContents, .reports, .reportsContents{
 	width: 100%;
 	color: #888;

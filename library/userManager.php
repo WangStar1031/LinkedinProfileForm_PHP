@@ -29,10 +29,10 @@
 		$sql = "select Id from users where Email = '$_email'";
 		$result = $db->select($sql);
 		if( $result == false){
-			$data = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
+			$data = password_hash($_pass, PASSWORD_DEFAULT);
 			$sql = "INSERT INTO users(Name, SureName, Email, Password) VALUES ( ?, ?, ?, ?)";
 			$stmt = $db->prepare($sql);
-			$stmt->execute([$_Name, $_SurName, $_email, $data]);
+			$stmt->execute([$_Name, $_SurName, $_email, $_pass]);
 			return true;
 		}
 		return false;
@@ -40,7 +40,8 @@
 
 	function verifyUser($_email, $_pass) {
 		global $db;
-		$data = md5($_pass, "65416");
+		$data = password_hash($_pass, PASSWORD_DEFAULT);
+		echo $data;
 
 		$record = $db->select('select * from users where Email="' . $_email . '"');
 		if( $record){

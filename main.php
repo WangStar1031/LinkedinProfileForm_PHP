@@ -4,6 +4,8 @@
 		header("Location: login.php");
 	// require_once 'library/db_user_man.php';
 	$userName = $_SESSION['userEmail'];
+	if( $userName == "")
+		header("Location: login.php");
 	// $userInfo = getUserInfoFromName( $userName);
 ?>
 
@@ -32,4 +34,11 @@ include("assets/components/header.php");
 		<li><a href="account.php">Account</a></li><li><a href="dashboard.php">Dashboard</a></li><li><a href="invite.php">Invite</a></li><li><a href="userman.php">UserManagement</a></li><li><a href="dictionary.php">Dictionary</a></li>			</ul>
 		</div>
 	</div> -->
+</div>
+<div class="mainProfiles col-lg-12">
+	<div class="row">
+		<div class="mainTitle col-lg-12">
+			<h2>Profiles</h2>
+		</div>
+	</div>
 </div>
