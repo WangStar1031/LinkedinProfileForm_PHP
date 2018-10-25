@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version 5.5.5-10.1.26-MariaDB)
-# Date: 2018-10-23 18:28:08
+# Date: 2018-10-25 15:58:42
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
 
@@ -35,30 +35,20 @@ CREATE TABLE `employment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 #
-# Structure for table "industry"
-#
-
-DROP TABLE IF EXISTS `industry`;
-CREATE TABLE `industry` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `IndName` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-#
 # Structure for table "profiles"
 #
 
 DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserId` int(11) DEFAULT NULL,
   `Prefix` varchar(255) DEFAULT NULL,
   `FirstName` varchar(255) DEFAULT NULL,
   `LastName` varchar(255) DEFAULT NULL,
   `Country` varchar(255) DEFAULT NULL,
   `Email` varchar(255) DEFAULT NULL,
   `PhoneNumber` varchar(255) DEFAULT NULL,
-  `IndustryId` int(11) DEFAULT NULL,
+  `Industry` varchar(255) DEFAULT NULL,
   `JobFunction` varchar(255) DEFAULT NULL,
   `ProfileUrl` varchar(255) DEFAULT NULL,
   `ImageUrl` varchar(255) DEFAULT NULL,

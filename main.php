@@ -2,11 +2,11 @@
 	session_start();
 	if( !isset( $_SESSION['userEmail']))
 		header("Location: login.php");
-	// require_once 'library/db_user_man.php';
 	$userName = $_SESSION['userEmail'];
 	if( $userName == "")
 		header("Location: login.php");
-	// $userInfo = getUserInfoFromName( $userName);
+	require_once 'library/UserManager.php';
+	$profiles = getProfiles( $userName);
 ?>
 
 <?php
@@ -16,9 +16,6 @@ include("assets/components/header.php");
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <title>Node.sg</title>
 
-<?php
-// print_r($_SESSION['userEmail']);
-?>
 <div class="topBar col-lg-12">
 	<a href="main.php">
 		<img src="assets/imgs/vision-logo.png">
@@ -39,6 +36,11 @@ include("assets/components/header.php");
 	<div class="row">
 		<div class="mainTitle col-lg-12">
 			<h2>Profiles</h2>
+		</div>
+		<div>
+			<?php
+			print_r($profiles);
+			?>
 		</div>
 	</div>
 </div>
