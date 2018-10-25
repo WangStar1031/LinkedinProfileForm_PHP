@@ -1,6 +1,12 @@
 body{
 	font-family: 'Raleway', sans-serif;
 }
+table{
+	width: 100%;
+}
+table td{
+	border: 1px solid #ddd;
+}
 .mainContents, .reports, .reportsContents{
 	width: 100%;
 	color: #888;

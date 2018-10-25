@@ -95,7 +95,7 @@
 		if( $record){
 			return false;
 		}
-		
+
 		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $db->prepare($sql);
 		$stmt->execute([$userId, $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $profile, $imgUrl, $profileTitle, $biography]);
@@ -155,8 +155,18 @@
 		$record = $db->select('select * from users where Email="' . $_email . '"');
 		if( $record ){
 			$userId = $record[0]['Id'];
-			return $db->select('select * from users where UserId="' . $userId . '" limit ' . $_pageNum * $_offset . "," . $_offset);
+			return $db->select('select * from profiles where UserId="' . $userId . '" limit ' . $_pageNum * $_offset . "," . $_offset);
 		}
 		return $record;
+	}
+
+	function getEmployHistory($_profileId){
+		global $db;
+		$sql = "select * from employment where ProfileId=" . $_profileId;
+		$record = $db->select($sql);
+		if( $record){
+			return $record;
+		}
+		return [];
 	}
 ?>

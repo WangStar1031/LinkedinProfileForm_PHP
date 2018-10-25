@@ -7,6 +7,7 @@
 		header("Location: login.php");
 	require_once 'library/UserManager.php';
 	$profiles = getProfiles( $userName);
+
 ?>
 
 <?php
@@ -37,10 +38,58 @@ include("assets/components/header.php");
 		<div class="mainTitle col-lg-12">
 			<h2>Profiles</h2>
 		</div>
-		<div>
+		<div class="profileList col-lg-12">
+			<table>
+				<tr>
+					<th class="check"></th>
+					<th class="img"></th>
+					<th class="prefix"></th>
+					<th>FirstName</th>
+					<th>LastName</th>
+					<th>Country</th>
+					<th>Email</th>
+					<th>PhoneNumber</th>
+					<th>Industry</th>
+					<th>ProfileUrl</th>
+					<th>ProfileTitle</th>
+					<!-- <th>FirstName</th> -->
+				</tr>
 			<?php
-			print_r($profiles);
+			// echo "<div>";
+			// print_r($profiles);
+			// echo "</div>";
+			foreach ($profiles as $profile) {
+				$profileId = $profile["Id"];
+				$prefix = $profile["Prefix"];
+				$firstName = $profile["FirstName"];
+				$lastName = $profile["LastName"];
+				$country = $profile["Country"];
+				$email = $profile["Email"];
+				$phoneNumber = $profile["PhoneNumber"];
+				$industry = $profile["Industry"];
+				$profileUrl = $profile["ProfileUrl"];
+				$imageUrl = $profile["ImageUrl"];
+				$profileTitle = $profile["ProfileTitle"];
+				$biography = $profile["Biography"];
 			?>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td><img style="width: 50px; border-radius: 100%" src="<?=$imageUrl?>"></td>
+				<td><?=$prefix?></td>
+				<td><?=$firstName?></td>
+				<td><?=$lastName?></td>
+				<td><?=$country?></td>
+				<td><?=$email?></td>
+				<td><?=$phoneNumber?></td>
+				<td><?=$industry?></td>
+				<td><?=$profileUrl?></td>
+				<td><?=$profileTitle?></td>
+			</tr>
+			<?php
+				$employHistory = getEmployHistory($profileId);
+			}
+			?>
+			</table>
 		</div>
 	</div>
 </div>
