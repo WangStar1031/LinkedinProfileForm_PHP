@@ -149,17 +149,6 @@
 		}
 		return true;
 	}
-
-	function getProfiles($_email, $_pageNum = 0, $_offset = 20){
-		global $db;
-		$record = $db->select('select * from users where Email="' . $_email . '"');
-		if( $record ){
-			$userId = $record[0]['Id'];
-			return $db->select('select * from profiles where UserId="' . $userId . '" limit ' . $_pageNum * $_offset . "," . $_offset);
-		}
-		return $record;
-	}
-
 	function getEmployHistory($_profileId){
 		global $db;
 		$sql = "select * from employment where ProfileId=" . $_profileId;
@@ -168,5 +157,100 @@
 			return $record;
 		}
 		return [];
+	}
+	function getEducationHistory($_profileId){
+		global $db;
+		$sql = "select * from education where ProfileId=" . $_profileId;
+		$record = $db->select($sql);
+		if( $record){
+			return $record;
+		}
+		return [];
+	}
+	function getProfileInfos($_email, $_filter){
+	// function getProfileInfos($_email, $_gender, $_recCount, $_pageNum, $_country, $_company){
+		global $db;
+		$_gender = '';
+		if(isset($_filter->gender)) $_gender = $_filter->gender;
+		$_recCount = '';
+		if(isset($_filter->recCount)) $_recCount = $_filter->recCount;
+		$_pageNum = '';
+		if(isset($_filter->pageNum)) $_pageNum = $_filter->pageNum;
+		$_country = '';
+		if(isset($_filter->country)) $_country = $_filter->country;
+		$_company = '';
+		if(isset($_filter->company)) $_company = $_filter->company;
+
+		$_jobsFunction = '';
+		if(isset($_filter->jobsFunction)) $_jobsFunction = $_filter->jobsFunction;
+		$_industry = '';
+		if(isset($_filter->industry)) $_industry = $_filter->industry;
+		$_geography = '';
+		if(isset($_filter->geography)) $_geography = $_filter->geography;
+
+		$userId = getUserId($_email);
+		$sql = "select * from profiles ";
+		$where = "where UserId=".$userId;
+		switch ($_gender) {
+			// case 'All':
+			// 	break;
+			case 'Male':
+				$where .= " and Prefix='Mr.'";
+				break;
+			case 'Female':
+				$where .= " and Prefix='Ms.'";
+				break;
+		}
+		// if( $_country != ""){
+		// 	$where .= " and Country like '%" . $_country . "%'";
+		// }
+		if( $_jobsFunction != ""){
+			$where .= " and JobFunction like '%" . $_jobsFunction . "%'";
+		}
+		if( $_industry != ""){
+			$where .= " and Industry like '%" . $_industry . "%'";
+		}
+		if( $_geography != ""){
+			$where .= " and Country like '%" . $_geography . "%'";
+		}
+		if( $_company != ""){
+			$sql_com = "select distinct ProfileId from employment where CompanyName like '%" . $_company . "%'";
+			$comRecords = $db->select($sql_com);
+			$profiles = [];
+			foreach ($comRecords as $proId) {
+				$profiles[] = $proId["ProfileId"];
+			}
+			$where .= " and Id in (" . implode(",", $profiles) . ")";
+		}
+		$countRec = $db->select("select count(*) as count from profiles " . $where);
+		$count = $countRec[0]['count'];
+		$where .= " limit " . (($_pageNum-1) * $_recCount) . "," . $_recCount;
+		// echo $sql . $where;
+		$record = $db->select($sql . $where);
+		// print_r($record);
+		$retVal = new \stdClass;
+		$retVal->count = $count;
+		$retVal->profiles = [];
+		if( $record){
+			foreach ($record as $value) {
+				$profileId = $value['Id'];
+				$empHist = getEmployHistory($profileId);
+				$value['employHistory'] = $empHist;
+				$empHist = getEducationHistory($profileId);
+				$value['educationHistory'] = $empHist;
+				$retVal->profiles[] = $value;
+			}
+			// $retVal->profiles = $record;
+		}
+		return $retVal;
+	}
+	function getProfiles($_email, $_pageNum = 0, $_offset = 20){
+		global $db;
+		$record = $db->select('select * from users where Email="' . $_email . '"');
+		if( $record ){
+			$userId = $record[0]['Id'];
+			return $db->select('select * from profiles where UserId="' . $userId . '" limit ' . $_pageNum * $_offset . "," . $_offset);
+		}
+		return $record;
 	}
 ?>

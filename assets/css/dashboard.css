@@ -1,11 +1,40 @@
 body{
 	font-family: 'Raleway', sans-serif;
 }
-table{
+.genderFilterDiv{
+	display: none;
+}
+.profileList table{
 	width: 100%;
 }
-table td{
+.profileList table td{
 	border: 1px solid #ddd;
+	padding: 5px 7px 5px 7px;
+}
+.profileList table td input[type=text]{
+	border: none;
+    width: 100%;
+}
+.grayRow, .grayRow input{
+	background-color: #ccc;
+}
+.whiteRow, .whiteRow input{
+	background-color: white;
+}
+.searchTable{
+	border: 1px solid #ddd;
+	padding: 7px 7px;
+}
+.searchTable .btn{
+	border: 1px solid #ddd;
+	margin: 0px 10px;
+	padding: 10px;
+}
+img.profileImg{
+	width: 40px;
+	border-radius: 100%;
+	vertical-align: middle;
+	cursor: pointer;
 }
 .mainContents, .reports, .reportsContents{
 	width: 100%;
