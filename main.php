@@ -1,11 +1,15 @@
 <?php
+	// ini_set('display_errors', 1);
+	// ini_set('display_startup_errors', 1);
+	// error_reporting(E_ALL);
+
 	session_start();
 	if( !isset( $_SESSION['userEmail']))
 		header("Location: login.php");
 	$userEmail = $_SESSION['userEmail'];
 	if( $userEmail == "")
 		header("Location: login.php");
-	require_once 'library/UserManager.php';
+	require_once __DIR__ . '/library/userManager.php';
 	$genderFilter = '';
 	if( isset($_GET['genderFilter'])) $genderFilter = $_GET['genderFilter'];
 	if( isset($_POST['genderFilter'])) $genderFilter = $_POST['genderFilter'];
@@ -47,7 +51,7 @@
 	$_filter->industry = $industryFilter;
 	$_filter->geography = $geographyFilter;
 	$_filter->intelSearch = $intelSearchFilter;
-	
+
 	$preTime = microtime();
 	$profileInfos = getProfileInfos( $userEmail, $_filter);
 	// print_r($profileInfos);
