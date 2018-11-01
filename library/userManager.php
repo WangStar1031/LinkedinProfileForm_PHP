@@ -188,9 +188,48 @@
 		$_geography = '';
 		if(isset($_filter->geography)) $_geography = $_filter->geography;
 
+		$_intelSearch = '';
+		if(isset($_filter->intelSearch)) $_intelSearch = $_filter->intelSearch;
+
 		$userId = getUserId($_email);
 		$sql = "select * from profiles ";
-		$where = "where UserId=".$userId;
+		$where = "where UserId=" . $userId;
+		if( $_intelSearch != ""){
+			$intelWhere = " and (";
+			$intelWhere .= " Prefix like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or FirstName like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or LastName like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or Country like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or Email like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or PhoneNumber like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or Industry like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or ProfileTitle like '%" . $_intelSearch . "%'";
+			$intelWhere .= " or Biography like '%" . $_intelSearch . "%'";
+
+			$sql_com = "select distinct ProfileId from employment where CompanyName like '%" . $_intelSearch . "%'";
+			$comRecords = $db->select($sql_com);
+			$profiles = [];
+			if( $comRecords){
+				foreach ($comRecords as $proId) {
+					$profiles[] = $proId["ProfileId"];
+				}	
+			}
+			$sql_edu = "select distinct ProfileId from education where SchoolName like '%" . $_intelSearch . "%'";
+			$eduRecords = $db->select($sql_com);
+			if( $eduRecords){
+				foreach ($eduRecords as $proId) {
+					if( array_search( $proId["ProfileId"], $profiles) !== false){
+						$profiles[] = $proId["ProfileId"];
+					}
+				}
+			}
+			if( count($profiles)){
+				$intelWhere .= " and Id in (" . implode(",", $profiles) . ")";
+			}
+
+			$intelWhere .= ")";
+			$where .= $intelWhere;
+		}
 		switch ($_gender) {
 			// case 'All':
 			// 	break;

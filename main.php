@@ -33,7 +33,9 @@
 	$geographyFilter = '';
 	if( isset($_GET['geographyFilter'])) $geographyFilter = $_GET['geographyFilter'];
 	if( isset($_POST['geographyFilter'])) $geographyFilter = $_POST['geographyFilter'];
-
+	$intelSearchFilter = '';
+	if( isset($_GET['intelSearchFilter'])) $intelSearchFilter = $_GET['intelSearchFilter'];
+	if( isset($_POST['intelSearchFilter'])) $intelSearchFilter = $_POST['intelSearchFilter'];
 	// getProfileInfos($_email, $_gender, $_recCount, $_pageNum, $_country, $_company);
 	$_filter = new \stdClass;
 	$_filter->gender = $genderFilter;
@@ -44,6 +46,8 @@
 	$_filter->jobsFunction = $jobsFunctinoFilter;
 	$_filter->industry = $industryFilter;
 	$_filter->geography = $geographyFilter;
+	$_filter->intelSearch = $intelSearchFilter;
+	
 	$preTime = microtime();
 	$profileInfos = getProfileInfos( $userEmail, $_filter);
 	// print_r($profileInfos);
@@ -95,7 +99,7 @@ include("assets/components/header.php");
 					<div class="btn" onclick="btnDeleteClicked()"><i class="fa fa-trash-o"></i></div> -->
 					<div class="intelSearchDiv">
 						<h4>Search</h4>
-						<input type="text" name="intelSearch" style="width: 100%;" placeholder="Keyword Search">
+						<input type="text" name="intelSearchFilter" style="width: 100%;" placeholder="Keyword Search" value="<?=$intelSearchFilter?>">
 					</div>
 					<h4>Filter</h4>
 					<span>
