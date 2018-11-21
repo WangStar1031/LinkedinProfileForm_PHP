@@ -73,7 +73,7 @@
 		$userId = getUserId($_email);
 		if( $userId == false)
 			return false;
-		file_put_contents($_email . ".log", json_encode($_profile));
+		// file_put_contents($_email . ".log", json_encode($_profile));
 		global $db;
 
 
@@ -193,7 +193,8 @@
 
 		$userId = getUserId($_email);
 		$sql = "select * from profiles ";
-		$where = "where UserId=" . $userId;
+		// $where = "where UserId=" . $userId;
+		$where = "where 1";
 		if( $_intelSearch != ""){
 			$intelWhere = " and (";
 			$intelWhere .= " Prefix like '%" . $_intelSearch . "%'";
@@ -285,6 +286,8 @@
 	}
 	function getProfiles($_email, $_pageNum = 0, $_offset = 20){
 		global $db;
+		return $db->select('select * from profiles limit ' . $_pageNum * $_offset . "," . $_offset);
+
 		$record = $db->select('select * from users where Email="' . $_email . '"');
 		if( $record ){
 			$userId = $record[0]['Id'];

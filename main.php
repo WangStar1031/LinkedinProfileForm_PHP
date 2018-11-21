@@ -13,7 +13,7 @@
 	$genderFilter = '';
 	if( isset($_GET['genderFilter'])) $genderFilter = $_GET['genderFilter'];
 	if( isset($_POST['genderFilter'])) $genderFilter = $_POST['genderFilter'];
-	// echo $genderFilter;
+
 	$recordCountFilter = 10;
 	if( isset($_GET['recordCountFilter'])) $recordCountFilter = $_GET['recordCountFilter'];
 	if( isset($_POST['recordCountFilter'])) $recordCountFilter = $_POST['recordCountFilter'];
@@ -23,7 +23,7 @@
 	$countryFilter = '';
 	if( isset($_GET['countryFilter'])) $countryFilter = $_GET['countryFilter'];
 	if( isset($_POST['countryFilter'])) $countryFilter = $_POST['countryFilter'];
-	// echo($countryFilter);
+
 	$companyNameFilter = '';
 	if( isset($_GET['companyNameFilter'])) $companyNameFilter = $_GET['companyNameFilter'];
 	if( isset($_POST['companyNameFilter'])) $companyNameFilter = $_POST['companyNameFilter'];
@@ -40,7 +40,6 @@
 	$intelSearchFilter = '';
 	if( isset($_GET['intelSearchFilter'])) $intelSearchFilter = $_GET['intelSearchFilter'];
 	if( isset($_POST['intelSearchFilter'])) $intelSearchFilter = $_POST['intelSearchFilter'];
-	// getProfileInfos($_email, $_gender, $_recCount, $_pageNum, $_country, $_company);
 	$_filter = new \stdClass;
 	$_filter->gender = $genderFilter;
 	$_filter->recCount = $recordCountFilter;
@@ -54,7 +53,6 @@
 
 	$preTime = microtime();
 	$profileInfos = getProfileInfos( $userEmail, $_filter);
-	// print_r($profileInfos);
 	$profiles = $profileInfos->profiles;
 	$allCount = $profileInfos->count;
 	$maxPageNum = ($allCount % $recordCountFilter == 0 ? intval($allCount / $recordCountFilter) : intval($allCount / $recordCountFilter) + 1);
@@ -83,13 +81,6 @@ include("assets/components/header.php");
 	<div class="topUserInfo">
 		<a href="logout.php">Log Out &nbsp;&nbsp;<span><i class="fa fa-sign-out"></i></span></a>
 	</div>
-<!-- 	<div class="topNavMenu">
-		<div class="dropdown">
-			<a href="javascript:;">Menu <span><i class="fa fa-bars"></i></span></a>
-			<ul class="dropdown-content">
-		<li><a href="account.php">Account</a></li><li><a href="dashboard.php">Dashboard</a></li><li><a href="invite.php">Invite</a></li><li><a href="userman.php">UserManagement</a></li><li><a href="dictionary.php">Dictionary</a></li>			</ul>
-		</div>
-	</div> -->
 </div>
 <div class="mainProfiles col-lg-12">
 	<div class="row">
@@ -99,8 +90,6 @@ include("assets/components/header.php");
 		<div class="searchOptions col-lg-12">
 			<form class="searchForm" method="POST">
 				<div class="searchTable col-lg-12">
-					<!-- <input type="checkbox" onclick="checkAll()">
-					<div class="btn" onclick="btnDeleteClicked()"><i class="fa fa-trash-o"></i></div> -->
 					<div class="intelSearchDiv">
 						<h4>Search</h4>
 						<input type="text" name="intelSearchFilter" style="width: 100%;" placeholder="Keyword Search" value="<?=$intelSearchFilter?>">
@@ -109,10 +98,6 @@ include("assets/components/header.php");
 					<span>
 						Company Name:
 						<input type="text" name="companyNameFilter" value="<?=$companyNameFilter?>">
-						<!-- From Date:
-						<input type="date" name="fromCompanyDate" value="1900-01-01">
-						To Date:
-						<input type="date" name="toCompanyDate" value="<?php echo date('Y-m-d');?>"> -->
 					</span>
 					<span>
 						Jobs Function:
@@ -126,16 +111,8 @@ include("assets/components/header.php");
 						Geography:
 						<input type="text" name="geographyFilter" value="<?=$geographyFilter?>">
 					</span>
-					<!-- <span class="genderFilterDiv">
-						Gender: 
-						<select name="genderFilter">
-							<option <?php if($genderFilter == "All") echo"selected";?>>All</option>
-							<option <?php if($genderFilter == "Male") echo"selected";?>>Male</option>
-							<option <?php if($genderFilter == "Female") echo"selected";?>>Female</option>
-						</select> -->
-					</span>
 					<span class="recordCountFilterDiv">
-						Record count per page:
+						Views per page:
 						<select name="recordCountFilter">
 							<option <?php if($recordCountFilter == "10") echo "selected";?>>10</option>
 							<option <?php if($recordCountFilter == "20") echo "selected";?>>20</option>
@@ -147,41 +124,19 @@ include("assets/components/header.php");
 						Page Number:
 						<input type="number" name="pageNumFilter" min="1" max="<?=$maxPageNum?>" value="<?=$pageNum?>" style="width: 50px;">
 					</span>
-<!-- 					<span>
-						Country:
-						<input type="text" name="countryFilter" value="<?=$countryFilter?>">
-					</span> -->
 					<button>Search</button>
 				</div>
 			</form>
 		</div>
 		<div class="profileList col-lg-12">
 			<div>
-				<b> Result : </b><span><?=$processTime?>seconds </span>
-				<b> Total : </b><span><?=$allCount?></span>
-				<b> From : </b><span><?=$firstNumber?></span>
-				<b> To : </b><span><?=$endNumber?></span>
+				<b> Result : </b><span><?=$processTime?> secs </span> &nbsp&nbsp&nbsp
+				<b> Number of matches : </b><span><?=$allCount?></span> &nbsp&nbsp&nbsp
+				<b>Page : </b>
 			</div>
+			<br>
 			<table>
-				<tr>
-					<th class="number"></th>
-					<!-- <th class="check"></th> -->
-					<th class="img"></th>
-					<th class="prefix"></th>
-					<th>FirstName</th>
-					<th>LastName</th>
-					<th>Country</th>
-					<th>Email</th>
-					<th>PhoneNumber</th>
-					<th>Industry</th>
-					<th>ProfileUrl</th>
-					<th>ProfileTitle</th>
-					<!-- <th>FirstName</th> -->
-				</tr>
 			<?php
-			// echo "<div>";
-			// print_r($profiles);
-			// echo "</div>";
 			$rowIndex = 0;
 			foreach ($profiles as $profile) {
 				$rowIndex++;
@@ -193,6 +148,7 @@ include("assets/components/header.php");
 				$email = $profile["Email"];
 				$phoneNumber = $profile["PhoneNumber"];
 				$industry = $profile["Industry"];
+				$jobfunction = $profile["JobFunction"];
 				$profileUrl = $profile["ProfileUrl"];
 				$imageUrl = $profile["ImageUrl"];
 				$profileTitle = $profile["ProfileTitle"];
@@ -200,70 +156,58 @@ include("assets/components/header.php");
 				$employHistory = $profile["employHistory"];
 				$educationHistory = $profile["educationHistory"];
 			?>
-			<tr
-			<?php 
-			if($rowIndex % 2 == 0){
-				echo "class='grayRow'";
-			} else{
-				echo "class='whiteRow'";
-			}
-			?>>
+			<tr>
 				<td><?=$rowIndex?></td>
-				<td style="display: none;" class="profileId" rowIndex="<?=$rowIndex?>"><?=$profileId?></td>
-				<!-- <td><input type="checkbox"></td> -->
-				<td><img class="profileImg" src="<?=$imageUrl?>" onclick="imgClicked(this)"></td>
-				<td><?=$prefix?></td>
-				<td><input type="text" title="<?=$firstName?>" value="<?=$firstName?>"></td>
-				<td><input type="text" title="<?=$lastName?>" value="<?=$lastName?>"></td>
-				<td><input type="text" title="<?=$country?>" value="<?=$country?>"></td>
-				<td><a href="mailto:<?=$email.'?Subject=Hi, '.$firstName?>"><input type="text" title="<?=$email?>" value="<?=$email?>"></a></td>
-				<td><input type="text" title="<?=$phoneNumber?>" value="<?=$phoneNumber?>"></td>
-				<td><input type="text" title="<?=$industry?>" value="<?=$industry?>"></td>
-				<td><a href="<?=$profileUrl?>" target="_blank"><input type="text" title="<?=$profileUrl?>" value="<?=$profileUrl?>"></a></td>
-				<td><input type="text" title="<?=$profileTitle?>" value="<?=$profileTitle?>"></td>
-			</tr>
-			<tr class="profileDetails HideItem <?php echo($rowIndex %2 == 0 ? 'grayRow' : 'whiteRow')?>" id="detail<?=$rowIndex?>">
-				<td colspan="11">
-					<div class="row">
-						<div class="col-lg-6">
-							<h5>Biography</h5>
-							<?=$biography?>
-						</div>
-						<div class="col-lg-3">
-							<h5>Employment History</h5>
-							<?php
-							foreach ($employHistory as $value) {
-								$comName = $value['CompanyName'];
-								$roleTitle = $value['RoleTitle'];
-								$fromDate = $value['FromDate'];
-								$toDate = $value['ToDate'];
-							?>
-							<div><strong><?=$roleTitle?></strong> at <strong><?=$comName?></strong></div>
-							<?=$fromDate?> - <?=$toDate?>
-							<?php
-							}
-							?>
-						</div>
-						<div class="col-lg-3">
-							<h5>Education History</h5>
-							<?php
-							foreach ($educationHistory as $value) {
-								$schoolName = $value['SchoolName'];
-								$degreeName = $value['DegreeName'];
-								$areaName = $value['AreaName'];
-								$startYear = $value['StartYear'];
-								$endYear = $value['EndYear'];
-							?>
-							<div><strong><?=$schoolName?></strong></div>
-							<div><?=$degreeName?> <?=$areaName?></div>
-							<div><?=$startYear?> - <?=$endYear?></div>
-							<?php
-							}
-							?>
-						</div>
+				<td style="width: 40%;">
+					<div>
+						<span><img src="<?=$imageUrl?>" style="width: 50px;border-radius: 100%;"></span>
+					
+					<span>
+						<table>
+							<tr>
+								<td><b>First Name:</b></td><td><input type="text" name="firstname" value="<?=$firstName?>"></td>
+								<td><b>Last Name:</b></td><td><input type="text" name="lastname" value="<?=$lastName?>"></td>
+							</tr>
+							<tr>
+								<td><b>Email Address:</b></td><td><input type="text" name="email" value="<?=$email?>"></td>
+								<td><b>Phone Number:</b></td><td><input type="text" name="phone" value="<?=$phoneNumber?>"></td>
+							</tr>
+						</table>
+<!-- 						<b>First Name:</b><input type="text" name="firstname" value="<?=$firstName?>">
+						<b>Last Name:</b><input type="text" name="lastname" value="<?=$lastName?>"> -->
+					</span>
 					</div>
+<!-- 					<br>
+					<span style="margin-left: 55px;"> <b>Email:</b><input type="text" name="email" value="<?=$email?>"></span>
+					<span style="margin-left: 55px;"> <b>Phone:</b><input type="text" name="phone" value="<?=$phoneNumber?>"></span> -->
+					<h5>Biography</h5>
+					<?=$biography?>
+					<!-- <textarea style="width: 100%;" rows="3"><?=$biography?></textarea> -->
+				</td>
+				<td>
+					<h5>Job Experience</h5>
+					<?php
+					$number = 0;
+					$strNumber = "";
+					foreach ($employHistory as $emps) {
+						$number++;
+						$strNumber = $number;
+						if( $number <= 9) $strNumber = "&nbsp&nbsp" . $number;
+					?>
+					<p><b><span><?=$strNumber?>)</span> <span><?=$emps["CompanyName"]?></span></b> <?=$emps["RoleTitle"]?>(<?=$emps["FromDate"]?> - <?=$emps["ToDate"]?>)</p>
+					<?php
+					}
+					?>
+				</td>
+				<td>
+					<p><b>Jobs Function : </b><?=$jobfunction?></p>
+					<p><b>Industry : </b><?=$industry?></p>
+					<p><b>Geography : </b><?=$country?></p>
+					<button class="btn btn-success">Save</button>
+					<button class="btn btn-danger">Remove</button>
 				</td>
 			</tr>
+
 			<?php
 				}
 			?>
@@ -275,6 +219,14 @@ include("assets/components/header.php");
 
 <script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
+	function setAutoHeight(){
+		var arrTexts = $("textarea");
+		for( var i = 0; i < arrTexts.length; i ++){
+			var curText = arrTexts.eq(i);
+			curText.css("height", curText.css("scrollHeight") + "px");
+		}
+	}
+	setAutoHeight();
 	function imgClicked(_this){
 		var curRow = $(_this).parent().parent();
 		var rowId = curRow.find('td').eq(0).text();

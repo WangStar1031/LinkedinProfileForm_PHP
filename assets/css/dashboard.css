@@ -12,8 +12,8 @@ body{
 	padding: 5px 7px 5px 7px;
 }
 .profileList table td input[type=text]{
-	border: none;
-    width: 100%;
+/*	border: none;
+    width: 100%;*/
 }
 .grayRow, .grayRow input{
 	background-color: #ccc;
@@ -107,4 +107,10 @@ p table{
 	width: 100%;
 	text-align: center;
 	margin: 0px;
+}
+table.profiles tr:nth-child(even){
+	background-color: red;
+}
+table table td{
+	border: none;
 }
