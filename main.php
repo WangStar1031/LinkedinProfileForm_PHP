@@ -91,6 +91,7 @@ include("assets/components/header.php");
 			<form class="searchForm" method="POST">
 				<div class="searchTable col-lg-12">
 					<div class="intelSearchDiv">
+						<button style="float: right; position: absolute; right: 7px;">Search</button>
 						<h4>Search</h4>
 						<input type="text" name="intelSearchFilter" style="width: 100%;" placeholder="Keyword Search" value="<?=$intelSearchFilter?>">
 					</div>
@@ -124,7 +125,6 @@ include("assets/components/header.php");
 						Page Number:
 						<input type="number" name="pageNumFilter" min="1" max="<?=$maxPageNum?>" value="<?=$pageNum?>" style="width: 50px;">
 					</span>
-					<button>Search</button>
 				</div>
 			</form>
 		</div>
@@ -161,28 +161,25 @@ include("assets/components/header.php");
 				<td style="width: 40%;">
 					<div>
 						<span><img src="<?=$imageUrl?>" style="width: 50px;border-radius: 100%;"></span>
-					
 					<span>
 						<table>
 							<tr>
-								<td><b>First Name:</b></td><td><input type="text" name="firstname" value="<?=$firstName?>"></td>
-								<td><b>Last Name:</b></td><td><input type="text" name="lastname" value="<?=$lastName?>"></td>
+								<td style="width: 25%;"><b>First Name:</b></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$firstName?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;"><b>Last Name:</b></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$lastName?></span><input type="text" class="edit HideItem"></td>
 							</tr>
 							<tr>
-								<td><b>Email Address:</b></td><td><input type="text" name="email" value="<?=$email?>"></td>
-								<td><b>Phone Number:</b></td><td><input type="text" name="phone" value="<?=$phoneNumber?>"></td>
+								<td style="width: 25%;"><b>Email Address:</b></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$email?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;"><b>Phone Number:</b></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$phoneNumber?></span><input type="text" class="edit HideItem"></td>
 							</tr>
 						</table>
-<!-- 						<b>First Name:</b><input type="text" name="firstname" value="<?=$firstName?>">
-						<b>Last Name:</b><input type="text" name="lastname" value="<?=$lastName?>"> -->
 					</span>
 					</div>
-<!-- 					<br>
-					<span style="margin-left: 55px;"> <b>Email:</b><input type="text" name="email" value="<?=$email?>"></span>
-					<span style="margin-left: 55px;"> <b>Phone:</b><input type="text" name="phone" value="<?=$phoneNumber?>"></span> -->
 					<h5>Biography</h5>
 					<?=$biography?>
-					<!-- <textarea style="width: 100%;" rows="3"><?=$biography?></textarea> -->
 				</td>
 				<td>
 					<h5>Job Experience</h5>
@@ -203,7 +200,7 @@ include("assets/components/header.php");
 					<p><b>Jobs Function : </b><?=$jobfunction?></p>
 					<p><b>Industry : </b><?=$industry?></p>
 					<p><b>Geography : </b><?=$country?></p>
-					<button class="btn btn-success">Save</button>
+					<button class="btn btn-disable" onclick="btnSaveClicked(this)">Save</button>
 					<button class="btn btn-danger">Remove</button>
 				</td>
 			</tr>
@@ -219,6 +216,48 @@ include("assets/components/header.php");
 
 <script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
+	function onEditableCellClicked(_this){
+		if( !$(_this).find(".edit").hasClass("HideItem"))return;
+		var curRow = $(_this).parent();
+		var curCell = $(_this);
+		var strContents = curCell.text();
+		$(_this).find(".edit").removeClass("HideItem").val(strContents);
+		curCell.find("span").addClass("HideItem");
+		$(_this).find(".edit").focus();
+		$(_this).find(".edit").keyup(function(e){
+			if( e.keyCode == 13){
+				// debugger;
+				var btnSave = $(this).parent().parent().parent().parent().parent().parent().parent().parent().find("td button").eq(0);
+				btnSave.removeClass("btn-disable").addClass("btn-primary");
+				// console.log(lastTd);
+				$(this).parent().find("span").text($(this).val()).removeClass("HideItem");
+				$(this).addClass("HideItem");
+			} else if( e.keyCode == 27){
+				$(this).parent().find("span").removeClass("HideItem");
+				$(this).addClass("HideItem");
+			}
+		});
+		$(_this).find(".edit").focusout(function(e){
+			$(this).parent().find("span").removeClass("HideItem");
+			$(this).addClass("HideItem");
+		});
+	}
+	function btnSaveClicked(_this){
+		if( $(_this).hasClass("btn-disable"))return;
+		$(_this).removeClass("btn-primary").addClass("btn-disable");
+	}
+	// function onLastNameClicked(_this){
+	// 	var curRow = $(_this).parent();
+	// 	var curCell = $(_this);
+	// }
+	// function onEmailClicked(_this){
+	// 	var curRow = $(_this).parent();
+	// 	var curCell = $(_this);
+	// }
+	// function onPhoneNumberClicked(_this){
+	// 	var curRow = $(_this).parent();
+	// 	var curCell = $(_this);
+	// }
 	function setAutoHeight(){
 		var arrTexts = $("textarea");
 		for( var i = 0; i < arrTexts.length; i ++){

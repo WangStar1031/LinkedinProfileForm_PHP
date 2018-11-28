@@ -73,9 +73,7 @@
 		$userId = getUserId($_email);
 		if( $userId == false)
 			return false;
-		// file_put_contents($_email . ".log", json_encode($_profile));
 		global $db;
-
 
 		$prefix = $_profile->prefix;
 		$firstName = $_profile->firstName;
@@ -90,7 +88,7 @@
 		$profileTitle = $_profile->strHeadLine;
 		$biography = $_profile->biography;
 
-		$sql = "select Id from profiles where UserId=" . $userId . " and Email='" . $email . "'";
+		$sql = "select Id from profiles where UserId=" . $userId . " and ProfileUrl='" . $profile . "'";
 		$record = $db->select($sql);
 		if( $record){
 			return false;
