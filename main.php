@@ -288,7 +288,7 @@ include("assets/components/header.php");
 		var biography = curRow.find(".biography").eq(0).html();
 		var profile = {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, biography: biography};
 		$.post("api_getProfiles.php", {case: 'modify',profileUrl: profileUrl, profile: profile}, function(data){
-		$(_this).removeClass("btn-primary").addClass("btn-disable");
+			$(_this).removeClass("btn-primary").addClass("btn-disable");
 		});
 	}
 	function setAutoHeight(){
