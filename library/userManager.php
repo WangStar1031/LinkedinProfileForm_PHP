@@ -44,7 +44,22 @@
 		}
 		return false;
 	}
-	
+	function modifyProfile($_profileUrl, $_profile){
+		$firstName = $_profile['firstName'];
+		$lastName = $_profile['lastName'];
+		$email = $_profile['email'];
+		$phoneNumber = $_profile['phoneNumber'];
+		$biography = $_profile['biography'];
+		global $db;
+		$sql = "UPDATE profiles SET FirstName=?, LastName=?, Email=?, PhoneNumber=?, Biography=? WHERE ProfileUrl=?";
+		$stmt= $db->prepare($sql);
+		$stmt->execute([$firstName, $lastName, $email, $phoneNumber, $biography, $_profileUrl]);
+	}	
+	function removeProfile($_profileUrl){
+		global $db;
+		$strsql = "delete from profiles where ProfileUrl='$_profileUrl'";
+		$db->__exec__($strsql);
+	}
 	function verifyUser($_email, $_pass) {
 		global $db;
 

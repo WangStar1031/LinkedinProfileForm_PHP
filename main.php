@@ -157,7 +157,7 @@ include("assets/components/header.php");
 				$educationHistory = $profile["educationHistory"];
 			?>
 			<tr>
-				<td><?=$rowIndex?></td>
+				<td><?=$rowIndex?><span class="profileUrl HideItem"><?=$profileUrl?></span></td>
 				<td style="width: 40%;">
 					<div>
 						<span><img src="<?=$imageUrl?>" style="width: 50px;border-radius: 100%;"></span>
@@ -165,21 +165,21 @@ include("assets/components/header.php");
 						<table>
 							<tr>
 								<td style="width: 25%;"><b>First Name:</b></td>
-								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$firstName?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span class="firstName"><?=$firstName?></span><input type="text" class="edit HideItem"></td>
 								<td style="width: 25%;"><b>Last Name:</b></td>
-								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$lastName?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span class="lastName"><?=$lastName?></span><input type="text" class="edit HideItem"></td>
 							</tr>
 							<tr>
 								<td style="width: 25%;"><b>Email Address:</b></td>
-								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$email?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span class="email"><?=$email?></span><input type="text" class="edit HideItem"></td>
 								<td style="width: 25%;"><b>Phone Number:</b></td>
-								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span><?=$phoneNumber?></span><input type="text" class="edit HideItem"></td>
+								<td style="width: 25%;" onclick="onEditableCellClicked(this)"><span class="phoneNumber"><?=$phoneNumber?></span><input type="text" class="edit HideItem"></td>
 							</tr>
 						</table>
 					</span>
 					</div>
 					<h5>Biography</h5>
-					<?=$biography?>
+					<div onclick="BiographyClicked(this)"><span class="biography"><?=$biography?></span><textarea class="HideItem"></textarea></div>
 				</td>
 				<td>
 					<h5>Job Experience</h5>
@@ -201,7 +201,7 @@ include("assets/components/header.php");
 					<p><b>Industry : </b><?=$industry?></p>
 					<p><b>Geography : </b><?=$country?></p>
 					<button class="btn btn-disable" onclick="btnSaveClicked(this)">Save</button>
-					<button class="btn btn-danger">Remove</button>
+					<button class="btn btn-danger" onclick="btnRemoveClicked(this)">Remove</button>
 				</td>
 			</tr>
 
@@ -226,10 +226,8 @@ include("assets/components/header.php");
 		$(_this).find(".edit").focus();
 		$(_this).find(".edit").keyup(function(e){
 			if( e.keyCode == 13){
-				// debugger;
 				var btnSave = $(this).parent().parent().parent().parent().parent().parent().parent().parent().find("td button").eq(0);
 				btnSave.removeClass("btn-disable").addClass("btn-primary");
-				// console.log(lastTd);
 				$(this).parent().find("span").text($(this).val()).removeClass("HideItem");
 				$(this).addClass("HideItem");
 			} else if( e.keyCode == 27){
@@ -242,22 +240,57 @@ include("assets/components/header.php");
 			$(this).addClass("HideItem");
 		});
 	}
+	function BiographyClicked(_this){
+		if( $(_this).find("span").eq(0).hasClass("HideItem")) return;
+		var bio = $(_this).find("span").eq(0).text();
+		$(_this).find("textarea").val(bio);
+		$(_this).find("textarea").width($(_this).find("span").eq(0).width());
+		$(_this).find("textarea").height($(_this).find("span").eq(0).height());
+		$(_this).find("span").eq(0).addClass("HideItem");
+		$(_this).find("textarea").eq(0).removeClass("HideItem");
+		$(_this).find("textarea").eq(0).focus();
+		$(_this).find("textarea").eq(0).focusout(function(e){
+			$(this).parent().find("span").removeClass("HideItem");
+			$(this).addClass("HideItem");
+		});
+		$(_this).find("textarea").eq(0).keyup(function(e){
+			if( e.keyCode == 13){
+				if( e.shiftKey || e.ctrlKey){
+					var btnSave = $(this).parent().parent().parent().parent().parent().parent().parent().parent().find("td button").eq(0);
+					btnSave.removeClass("btn-disable").addClass("btn-primary");
+					$(this).parent().find("span").text($(this).val());
+					$(this).parent().find("span").removeClass("HideItem");
+					$(this).addClass("HideItem");
+				}
+			} else if(e.keyCode == 27){
+				$(this).parent().find("span").removeClass("HideItem");
+				$(this).addClass("HideItem");
+			}
+		});
+	}
+	function btnRemoveClicked(_this){
+		var txt;
+		var r = confirm("Are you sure remove current profile?");
+		if (r != true) return;
+		var profileUrl = $(_this).parent().parent().find(".profileUrl").eq(0).html();
+		$.post("api_getProfiles.php", {case: 'remove', profileUrl: profileUrl}, function (data){
+			document.location.reload();
+		});
+	}
 	function btnSaveClicked(_this){
 		if( $(_this).hasClass("btn-disable"))return;
+		var curRow = $(_this).parent().parent();
+		var profileUrl = curRow.find(".profileUrl").eq(0).html();
+		var firstName = curRow.find(".firstName").eq(0).html();
+		var lastName = curRow.find(".lastName").eq(0).html();
+		var email = curRow.find(".email").eq(0).html();
+		var phoneNumber = curRow.find(".phoneNumber").eq(0).html();
+		var biography = curRow.find(".biography").eq(0).html();
+		var profile = {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, biography: biography};
+		$.post("api_getProfiles.php", {case: 'modify',profileUrl: profileUrl, profile: profile}, function(data){
 		$(_this).removeClass("btn-primary").addClass("btn-disable");
+		});
 	}
-	// function onLastNameClicked(_this){
-	// 	var curRow = $(_this).parent();
-	// 	var curCell = $(_this);
-	// }
-	// function onEmailClicked(_this){
-	// 	var curRow = $(_this).parent();
-	// 	var curCell = $(_this);
-	// }
-	// function onPhoneNumberClicked(_this){
-	// 	var curRow = $(_this).parent();
-	// 	var curCell = $(_this);
-	// }
 	function setAutoHeight(){
 		var arrTexts = $("textarea");
 		for( var i = 0; i < arrTexts.length; i ++){

@@ -15,6 +15,23 @@
 	if( isset($_GET['email'])) $email = $_GET['email'];
 	if( isset($_POST['email'])) $email = $_POST['email'];
 	switch ($case) {
+		case 'modify':
+			$profileUrl = '';
+			if( isset($_GET['profileUrl'])) $profileUrl = $_GET['profileUrl'];
+			if( isset($_POST['profileUrl'])) $profileUrl = $_POST['profileUrl'];
+			$profile = '';
+			if( isset($_GET['profile'])) $profile = $_GET['profile'];
+			if( isset($_POST['profile'])) $profile = $_POST['profile'];
+			if( $profileUrl != ''){
+				modifyProfile($profileUrl, $profile);
+			}
+			break;
+		case 'remove':
+			$profileUrl = '';
+			if( isset($_GET['profileUrl'])) $profileUrl = $_GET['profileUrl'];
+			if( isset($_POST['profileUrl'])) $profileUrl = $_POST['profileUrl'];
+			if( $profileUrl != '') removeProfile($profileUrl);
+			break;
 		case 'verify':
 			$pass = '';
 			if( isset($_GET['pass'])) $pass = $_GET['pass'];
