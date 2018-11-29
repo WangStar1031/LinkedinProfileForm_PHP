@@ -121,7 +121,7 @@ include("assets/components/header.php");
 							<option <?php if($recordCountFilter == "100") echo "selected";?>>100</option>
 						</select>
 					</span>
-					<span>
+					<span class="HideItem">
 						Page Number:
 						<input type="number" name="pageNumFilter" min="1" max="<?=$maxPageNum?>" value="<?=$pageNum?>" style="width: 50px;">
 					</span>
@@ -132,7 +132,7 @@ include("assets/components/header.php");
 			<div>
 				<b> Result : </b><span><?=$processTime?> secs </span> &nbsp&nbsp&nbsp
 				<b> Number of matches : </b><span><?=$allCount?></span> &nbsp&nbsp&nbsp
-				<b>Page : </b>
+				<b>Page : </b> <span class="pagesDiv"></span>
 			</div>
 			<br>
 			<table>
@@ -216,6 +216,90 @@ include("assets/components/header.php");
 
 <script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
+	function pageClicked(_this){
+		var pageNum = $(_this).text();
+		$("input[name=pageNumFilter]").val(pageNum);
+		$(".searchForm").submit();
+	}
+	function pageFirst(){
+		$("input[name=pageNumFilter]").val(1);
+		$(".searchForm").submit();
+	}
+	function pagePrev(){
+		var curPageNum = $("input[name=pageNumFilter]").val() * 1;
+		if( curPageNum == 1){
+			pageFirst();
+			return;
+		}
+		$("input[name=pageNumFilter]").val(curPageNum-1);
+		$(".searchForm").submit();
+	}
+	function pageLast(){
+		var maxPageNum = $("input[name=pageNumFilter]").attr("max");
+		$("input[name=pageNumFilter]").val(maxPageNum);
+		$(".searchForm").submit();
+	}
+	function pageNext(){
+		console.log($("input[name=pageNumFilter]").attr("max"));
+		var curPageNum = $("input[name=pageNumFilter]").val() * 1;
+		if( curPageNum == $("input[name=pageNumFilter]").attr("max")){
+			pageLast();
+			return;
+		}
+		$("input[name=pageNumFilter]").val($("input[name=pageNumFilter]").val()*1+1);
+		$(".searchForm").submit();
+	}
+	$(document).ready(function(){
+		var maxPageNum = $("input[name=pageNumFilter]").attr("max") * 1;
+		var curPageNum = $("input[name=pageNumFilter]").val() * 1;
+		if( maxPageNum <= 3){
+			for( var i = 0; i < maxPageNum; i++){
+				var strHtml = "<button class='btn' onclick='pageClicked(this)'>" + ( i * 1 + 1) + "</button>";
+				if( curPageNum - 1 == i){
+					strHtml = "<button class='btn btn-primary' onclick='pageClicked(this)'>" + ( i * 1 + 1) + "</button>";
+				}
+				$(".pagesDiv").append( strHtml);
+				$(".pagesDiv").append(" ");
+			}
+		} else {
+			$(".pagesDiv").append("<button class='btn' onclick='pageFirst()'><<</button>");
+			$(".pagesDiv").append(" ");
+			$(".pagesDiv").append("<button class='btn' onclick='pagePrev()'><</button>");
+			$(".pagesDiv").append(" ");
+			if( curPageNum == 1){
+				for( var i = 0; i < 3; i++){
+					strHtml = "<button class='btn' onclick='pageClicked(this)'>"+(i*1+1)+"</button>";
+					if( curPageNum - 1 == i){
+						strHtml = "<button class='btn btn-primary' onclick='pageClicked(this)'>"+(i*1+1)+"</button>";
+					}
+					$(".pagesDiv").append(strHtml);
+					$(".pagesDiv").append(" ");
+				}
+			} else if( curPageNum == maxPageNum){
+				for( var i = curPageNum - 3; i < curPageNum; i++){
+					strHtml = "<button class='btn' onclick='pageClicked(this)'>"+(i*1+1)+"</button>";
+					if( curPageNum - 1 == i){
+						strHtml = "<button class='btn btn-primary' onclick='pageClicked(this)'>"+(i*1+1)+"</button>";
+					}
+					$(".pagesDiv").append(strHtml);
+					$(".pagesDiv").append(" ");
+				}
+			} else{
+				for( var i = curPageNum - 1; i < curPageNum + 2; i++){
+					strHtml = "<button class='btn' onclick='pageClicked(this)'>"+i+"</button>";
+					if( curPageNum == i){
+						strHtml = "<button class='btn btn-primary' onclick='pageClicked(this)'>"+i+"</button>";
+					}
+					$(".pagesDiv").append(strHtml);
+					$(".pagesDiv").append(" ");
+				}
+
+			}
+			$(".pagesDiv").append("<button class='btn' onclick='pageNext()'>></button>");
+			$(".pagesDiv").append(" ");
+			$(".pagesDiv").append("<button class='btn' onclick='pageLast()'>>></button>");
+		}
+	});
 	function onEditableCellClicked(_this){
 		if( !$(_this).find(".edit").hasClass("HideItem"))return;
 		var curRow = $(_this).parent();
