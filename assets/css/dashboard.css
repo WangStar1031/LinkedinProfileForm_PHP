@@ -108,9 +108,12 @@ p table{
 	text-align: center;
 	margin: 0px;
 }
-table.profiles tr:nth-child(even){
-	background-color: red;
-}
 table table td{
 	border: none;
+}
+.profileList > table > tbody > tr:nth-child(odd){
+	background-color: #eee;
+}
+.pagesDiv button.btn{
+	padding: 2px 8px;
 }
