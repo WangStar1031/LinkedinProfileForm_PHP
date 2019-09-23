@@ -74,9 +74,9 @@
 		return 0;
 	}
 
-	function getProfileId($_userId, $_email){
+	function getProfileId($userId, $profile){
 		global $db;
-		$sql = "select Id from profiles where UserId=" . $_userId . " and Email='" . $_email . "'";
+		$sql = "select Id from profiles where UserId=" . $userId . " and ProfileUrl='" . $profile . "'";
 		$record = $db->select($sql);
 		if( $record){
 			return $record[0]["Id"];
@@ -112,8 +112,8 @@
 		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $db->prepare($sql);
 		$stmt->execute([$userId, $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $profile, $imgUrl, $profileTitle, $biography]);
-		
-		$profileId = getProfileId($userId, $email);
+		// sleep(2);
+		$profileId = getProfileId($userId, $profile);
 		if( !$profileId)
 			return false;
 
