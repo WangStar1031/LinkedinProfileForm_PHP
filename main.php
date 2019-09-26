@@ -71,7 +71,6 @@ include("assets/components/header.php");
 ?>
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
-<title>Node.sg</title>
 
 <div class="topBar col-lg-12">
 	<a href="main.php">
