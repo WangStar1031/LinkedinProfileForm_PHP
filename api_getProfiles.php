@@ -51,7 +51,7 @@
 			$data = '';
 			if( isset($_GET['data'])) $data = $_GET['data'];
 			if( isset($_POST['data'])) $data = $_POST['data'];
-			file_put_contents("filename.txt", $data . PHP_EOL, FILE_APPEND);
+			// file_put_contents("filename.txt", $data . PHP_EOL, FILE_APPEND);
 			$profile = json_decode($data);
 			$ret = saveProfile($email, $profile);
 			if( $ret == true){

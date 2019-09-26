@@ -106,16 +106,22 @@
 		$sql = "select Id from profiles where UserId=" . $userId . " and ProfileUrl='" . $profile . "'";
 		$record = $db->select($sql);
 		if( $record){
-			return false;
+			// return false;
+			$sql = "UPDATE profiles SET Prefix=?, FirstName=?, LastName=?, Country=?, Email=?, PhoneNumber=?, Industry=?, JobFunction=?, ImageUrl=?, ProfileTitle=?, Biography=?) WHERE UserId=? AND ProfileUrl=?";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([ $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $imgUrl, $profileTitle, $biography, $userId, $profile]);
+		} else{
+			$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$userId, $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $profile, $imgUrl, $profileTitle, $biography]);
 		}
 
-		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		$stmt = $db->prepare($sql);
-		$stmt->execute([$userId, $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $profile, $imgUrl, $profileTitle, $biography]);
 		// sleep(2);
 		$profileId = getProfileId($userId, $profile);
 		if( !$profileId)
 			return false;
+		$strsql = "DELETE FROM employment WHERE ProfileId='$profileId'";
+		$db->__exec__($strsql);
 
 		$strExperience = $_profile->strExperience;
 		foreach ($strExperience as $experience) {
@@ -140,6 +146,9 @@
 				$stmt->execute([$profileId, $companyName, $title, $fromDate, $toDate]);
 			}
 		}
+		$strsql = "DELETE FROM education WHERE ProfileId='$profileId'";
+		$db->__exec__($strsql);
+		
 		$strEducation = $_profile->strEducation;
 		foreach ($strEducation as $education) {
 			$schoolName = $education->schoolName;
