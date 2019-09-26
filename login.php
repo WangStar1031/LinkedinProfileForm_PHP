@@ -33,12 +33,11 @@ if( isset($_POST['email_name'])){
 include("assets/components/header.php");
 ?>
 <script src="assets/js/jquery.min.js"></script>
-<!-- <script src="assets/js/bootstrap.min.js"></script> -->
 
 <body>
 <main class="auth-main">
   <div class="auth-block">
-    <h3>Sign in  to Node.sg<!-- <img src="assets/imgs/vision-logo.png" width="50px;"> --> </h3>
+    <h3>Sign in  to Node.sg</h3>
     <form class="form-horizontal" method="POST">
       <input type="hidden" name="from" value="<?=$from?>">
       <div class="form-group">
