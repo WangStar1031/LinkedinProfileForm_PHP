@@ -1,0 +1,3 @@
+<?php
+?>
+project Details page.

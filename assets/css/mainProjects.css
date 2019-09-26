@@ -1,0 +1,21 @@
+.searchForm input{
+	padding-left: 28px;
+}
+.searchForm .searchIcon{
+	position: absolute;
+	top: 10px;
+	left: 25px;
+	cursor: pointer;
+	z-index: 1;
+}
+.mainProjects{
+	padding-top: 10px;
+}
+.mainProjects .floatRight{
+	float: right;
+	margin-right: 5px;
+}
+.titleP{
+	margin-bottom: 0px;
+	font-weight: bolder;
+}

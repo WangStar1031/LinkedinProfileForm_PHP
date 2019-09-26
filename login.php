@@ -2,7 +2,13 @@
 $email_name = "";
 $password = "";
 $userVeri = true;
-
+$from = "";
+if( isset($_GET['from'])){
+  $from = $_GET['from'];
+}
+if( isset($_POST['from'])){
+  $from = $_POST['from'];
+}
 if( isset($_POST['email_name'])){
   $email_name = $_POST['email_name'];
   if( isset($_POST['password'])){
@@ -13,7 +19,11 @@ if( isset($_POST['email_name'])){
   if( $userVeri == 1){
     session_start();
     $_SESSION['userEmail'] = $email_name;
-    header("Location: index.php");
+    if( $from != ""){
+      header("Location: index.php?from=" . $from);
+    } else{
+      header("Location: index.php");
+    }
   }
 }
 ?>
@@ -30,6 +40,7 @@ include("assets/components/header.php");
   <div class="auth-block">
     <h3>Sign in  to Node.sg<!-- <img src="assets/imgs/vision-logo.png" width="50px;"> --> </h3>
     <form class="form-horizontal" method="POST">
+      <input type="hidden" name="from" value="<?=$from?>">
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
 

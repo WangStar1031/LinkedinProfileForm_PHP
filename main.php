@@ -5,7 +5,7 @@
 
 	session_start();
 	if( !isset( $_SESSION['userEmail']))
-		header("Location: login.php");
+		header("Location: login.php?from=main.php");
 	$userEmail = $_SESSION['userEmail'];
 	if( $userEmail == "")
 		header("Location: login.php");
@@ -90,7 +90,7 @@ include("assets/components/header.php");
 			<form class="searchForm" method="POST">
 				<div class="searchTable col-lg-12">
 					<div class="intelSearchDiv">
-						<button style="float: right; position: absolute; right: 7px;">Search</button>
+						<button class="btn-success" style="float: right; position: absolute; right: 7px;">Search</button>
 						<h4>Search</h4>
 						<input type="text" name="intelSearchFilter" style="width: 100%;" placeholder="Keyword Search" value="<?=$intelSearchFilter?>">
 					</div>
