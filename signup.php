@@ -28,7 +28,7 @@ include("assets/components/header.php");
 <body>
 <main class="auth-main">
   <div class="auth-block">
-    <h3>Sign up to Node.sg<!-- <img src="assets/imgs/vision-logo.png" width="50px;"> --> </h3>
+    <h3>Sign up to Nodes<!-- <img src="assets/imgs/vision-logo.png" width="50px;"> --> </h3>
     <form class="form-horizontal" method="POST" onsubmit="return validate()">
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label" required>FirstName</label>

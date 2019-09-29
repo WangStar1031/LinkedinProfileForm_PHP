@@ -37,7 +37,7 @@ include("assets/components/header.php");
 <body>
 <main class="auth-main">
   <div class="auth-block">
-    <h3>Sign in  to Node.sg</h3>
+    <h3>Sign in  to Nodes</h3>
     <form class="form-horizontal" method="POST">
       <input type="hidden" name="from" value="<?=$from?>">
       <div class="form-group">
