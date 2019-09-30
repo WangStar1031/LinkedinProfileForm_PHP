@@ -8,16 +8,21 @@
 
 	define("DB_TYPE", "mysql");
 	define("DB_HOST", "localhost");
-	define("DB_NAME", "linkedin_profiles");
-	define("DB_USER", "root");
 
 	if(@file_get_contents(__DIR__."/localhost")){
+		define("DB_NAME", "linkedin_profiles");
+		define("DB_USER", "root");
 		define("DB_PASSWORD", "");
-	}
-	else{
+	} else if( @file_get_contents(__DIR__ . "/nodelbma")){
+		define("DB_NAME", "nodelbma_linkedin_profiles");
+		define("DB_USER", "nodelbma_user1");
 		define("DB_PASSWORD", "123guraud!");
 	}
-
+	else{
+		define("DB_NAME", "linkedin_profiles");
+		define("DB_USER", "root");
+		define("DB_PASSWORD", "123guraud!");
+	}
 	require_once __DIR__ . "/Mysql.php";
 
 	$db = new Mysql();
@@ -106,7 +111,6 @@
 		$sql = "select Id from profiles where UserId=" . $userId . " and ProfileUrl='" . $profile . "'";
 		$record = $db->select($sql);
 		if( $record){
-			// return false;
 			$sql = "UPDATE profiles SET Prefix=?, FirstName=?, LastName=?, Country=?, Email=?, PhoneNumber=?, Industry=?, JobFunction=?, ImageUrl=?, ProfileTitle=?, Biography=?) WHERE UserId=? AND ProfileUrl=?";
 			$stmt = $db->prepare($sql);
 			$stmt->execute([ $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $imgUrl, $profileTitle, $biography, $userId, $profile]);
@@ -148,7 +152,7 @@
 		}
 		$strsql = "DELETE FROM education WHERE ProfileId='$profileId'";
 		$db->__exec__($strsql);
-		
+
 		$strEducation = $_profile->strEducation;
 		foreach ($strEducation as $education) {
 			$schoolName = $education->schoolName;

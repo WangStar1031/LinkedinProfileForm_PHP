@@ -1,0 +1,54 @@
+﻿DROP TABLE IF EXISTS `education`;
+CREATE TABLE `education` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ProfileId` int(11) DEFAULT NULL,
+  `SchoolName` varchar(255) DEFAULT NULL,
+  `DegreeName` varchar(255) DEFAULT NULL,
+  `AreaName` varchar(255) DEFAULT NULL,
+  `StartYear` varchar(255) DEFAULT NULL,
+  `EndYear` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `employment`;
+CREATE TABLE `employment` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ProfileId` int(11) DEFAULT NULL,
+  `CompanyName` varchar(255) DEFAULT NULL,
+  `RoleTitle` varchar(255) DEFAULT NULL,
+  `FromDate` varchar(255) DEFAULT NULL,
+  `ToDate` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `profiles`;
+CREATE TABLE `profiles` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserId` int(11) DEFAULT NULL,
+  `Prefix` varchar(255) DEFAULT NULL,
+  `FirstName` varchar(255) DEFAULT NULL,
+  `LastName` varchar(255) DEFAULT NULL,
+  `Country` varchar(255) DEFAULT NULL,
+  `Email` varchar(255) DEFAULT NULL,
+  `PhoneNumber` varchar(255) DEFAULT NULL,
+  `Industry` varchar(255) DEFAULT NULL,
+  `JobFunction` varchar(255) DEFAULT NULL,
+  `ProfileUrl` varchar(255) DEFAULT NULL,
+  `ImageUrl` varchar(255) DEFAULT NULL,
+  `ProfileTitle` varchar(255) DEFAULT NULL,
+  `Biography` text,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `SureName` varchar(255) DEFAULT NULL,
+  `Email` varchar(255) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
