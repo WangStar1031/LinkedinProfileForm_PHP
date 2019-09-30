@@ -51,7 +51,7 @@
 	$_filter->geography = $geographyFilter;
 	$_filter->intelSearch = $intelSearchFilter;
 
-	$preTime = microtime();
+	$preTime = (int)microtime();
 	$profileInfos = getProfileInfos( $userEmail, $_filter);
 	$profiles = $profileInfos->profiles;
 	$allCount = $profileInfos->count;
@@ -61,7 +61,7 @@
 	$firstNumber = ($pageNum - 1) * $recordCountFilter + 1;
 	$endNumber = ( $allCount > $pageNum * $recordCountFilter ? $pageNum * $recordCountFilter : $allCount);
 
-	$curTime = microtime();
+	$curTime = (int)microtime();
 	$processTime = round(($curTime - $preTime) * 1000) / 1000;
 	
 ?>
