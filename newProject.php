@@ -17,7 +17,38 @@
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/mainProjects.css?<?= time();?>">
-
+<style type="text/css">
+	.smallButton{
+		margin-left: 20px;
+		cursor: pointer;
+		border-radius: 100%;
+		background-color: green;
+		color: white;
+		padding: 0px 4px;
+	}
+	.required:after{
+		content: "*";
+		color: red;
+		margin-left: 10px;
+	}
+	.addContactField{
+		width: calc(100% - 50px);
+		float: left;
+	}
+	.delContact, .delQuestion{
+		float: right;
+	}
+	#clientAddContact > div{
+		margin-bottom: 10px;
+	}
+	.question{
+		width: calc(100% - 50px);
+		float: left;
+	}
+	#lstQuestions{
+		margin-top: 10px;
+	}
+</style>
 <div class="topBar col-lg-12">
 	<a href="main.php">
 		<img src="assets/imgs/vision-logo.png">
@@ -46,13 +77,16 @@
 	<form>
 		<div class="row">
 			<div class="col-lg-6">
-				<h5>Client Name</h5>
+				<h5 class="required">Client Firm</h5>
 				<input type="text" name="clientName" class="form-control">
 			</div>
 			<div class="col-lg-6">
-				<h5>Client Contact</h5>
+				<h5 class="required">Client Contact</h5>
 				<input type="text" name="clientMainContact" class="form-control">
-				<p>Additional Contacts</p>
+				<p>Additional Contacts<span id="addContacts" class="smallButton">+</span></p>
+				<div id="clientAddContact" class="row">
+					
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -60,7 +94,7 @@
 				<h5>Project Information</h5>
 				<div class="row">
 					<div class="col-lg-6">
-						<p class="titleP">Title</p>
+						<p class="titleP required">Title</p>
 						<input type="text" name="projectTitle" class="form-control">
 					</div>
 					<div class="col-lg-6">
@@ -101,8 +135,10 @@
 						<div class="btn btn-primary addQuestion" style="float: right;width: 5rem;">Add</div>
 						<input type="hidden" name="profileQuestions">
 					</div>
-					<div class="col-lg-12" id="lstQuestions">
-						
+					<div class="col-lg-12">
+						<div class="row" id="lstQuestions">
+							
+						</div>
 					</div>
 				</div>
 			</div>
@@ -113,9 +149,17 @@
 <script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
 	function addQuestion(txtQuestion){
-		var lstQuestions = $("#lstQuestions p");
-		var strHtml = "<p>" + (lstQuestions.length + 1) + ". " + txtQuestion + "</p>";
+		var lstQuestions = $("#lstQuestions > div");
+		var strHtml = "";
+		strHtml += "<div class='col-lg-12'>";
+		strHtml += "<input class='question form-control' value='" + ". " + txtQuestion + "'>";
+		strHtml += "<div class='delQuestion btn btn-danger'>-</div>";
+		strHtml += "</div>";
 		$("#lstQuestions").append(strHtml);
+		$(".delQuestion").unbind("click");
+		$(".delQuestion").click(function(){
+			$(this).parent().remove();
+		});
 	}
 	$(".addQuestion").click(function(){
 		var txtQuestion = $("#profileQuestions").val();
@@ -137,5 +181,55 @@
 	});
 	$(".saveProject").click(function(){
 		console.log('saveProject');
-	})
+
+		var clientFirm = $("input[name=clientName]").val();
+		if( !clientFirm) return;
+		console.log( clientFirm);
+		var clientContact = $("input[name=clientMainContact]").val();
+		if( !clientContact) return;
+		console.log(clientContact);
+		var lstAdditionals = $("input.addContactField");
+		var lstAddContacts = [];
+		for( var i = 0; i < lstAdditionals.length; i++){
+			var curConName = lstAdditionals.eq(i).val();
+			if( !curConName) continue;
+			lstAddContacts.push(curConName);
+		}
+		console.log( lstAddContacts);
+		var projectTitle = $("input[name=projectTitle]").val();
+		if( !projectTitle)return;
+		console.log(projectTitle);
+		var projectType = $("select[name=projectType]").val();
+		if( !projectType) return;
+		console.log( projectType);
+		var projectDesc = $("textarea[name=projectDesc]").val();
+		if( !projectDesc) return;
+		console.log(projectDesc);
+		var practiceArea = $("select[name=practiceArea]").val();
+		if( !practiceArea) return;
+		console.log(practiceArea);
+		// var 
+
+	});
+	$("#addContacts").click(function(){
+		var strHtml = "";
+		strHtml += "<div class='col-lg-12'>";
+			strHtml += "<input class='addContactField form-control'>";
+			strHtml += "<div class='btn btn-danger delContact'>-</div>";
+		strHtml += "</div>";
+		$("#clientAddContact").append(strHtml);
+		$(".delContact").unbind("click");
+		$(".delContact").click(function(){
+			console.log($(".delContact").length);
+			console.log(this);
+			console.log($(this).index());
+			$(this).parent().remove();
+		})
+		return;
+		var newContact = prompt("Please enter new contact name");
+		if( newContact != null){
+			console.log( newContact);
+
+		}
+	});
 </script>
