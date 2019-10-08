@@ -48,6 +48,9 @@
 	#lstQuestions{
 		margin-top: 10px;
 	}
+	#lstQuestions > div{
+		margin-bottom: 10px;
+	}
 </style>
 <div class="topBar col-lg-12">
 	<a href="main.php">
@@ -152,7 +155,7 @@
 		var lstQuestions = $("#lstQuestions > div");
 		var strHtml = "";
 		strHtml += "<div class='col-lg-12'>";
-		strHtml += "<input class='question form-control' value='" + ". " + txtQuestion + "'>";
+		strHtml += "<input class='question form-control' value='" + txtQuestion + "'>";
 		strHtml += "<div class='delQuestion btn btn-danger'>-</div>";
 		strHtml += "</div>";
 		$("#lstQuestions").append(strHtml);
@@ -181,13 +184,15 @@
 	});
 	$(".saveProject").click(function(){
 		console.log('saveProject');
-
+		var data = {};
 		var clientFirm = $("input[name=clientName]").val();
 		if( !clientFirm) return;
-		console.log( clientFirm);
+		data.clientFirm = clientFirm;
+
 		var clientContact = $("input[name=clientMainContact]").val();
 		if( !clientContact) return;
-		console.log(clientContact);
+		data.clientContact = clientContact;
+
 		var lstAdditionals = $("input.addContactField");
 		var lstAddContacts = [];
 		for( var i = 0; i < lstAdditionals.length; i++){
@@ -195,20 +200,42 @@
 			if( !curConName) continue;
 			lstAddContacts.push(curConName);
 		}
-		console.log( lstAddContacts);
+		data.lstAddContacts = lstAddContacts;
+
 		var projectTitle = $("input[name=projectTitle]").val();
 		if( !projectTitle)return;
-		console.log(projectTitle);
+		data.projectTitle = projectTitle;
+
 		var projectType = $("select[name=projectType]").val();
 		if( !projectType) return;
-		console.log( projectType);
+		data.projectType = projectType;
+
 		var projectDesc = $("textarea[name=projectDesc]").val();
 		if( !projectDesc) return;
-		console.log(projectDesc);
+		data.projectDesc = projectDesc;
+
 		var practiceArea = $("select[name=practiceArea]").val();
 		if( !practiceArea) return;
-		console.log(practiceArea);
-		// var 
+		data.practiceArea = practiceArea;
+
+		var lstQuestions = $("input.question");
+		var lstProfileQuestions = [];
+		for( var i = 0; i < lstQuestions.length; i++){
+			var curQuestion = lstQuestions.eq(i).val();
+			if( !curQuestion)continue;
+			lstProfileQuestions.push(curQuestion);
+		}
+		data.lstProfileQuestions = lstProfileQuestions;
+
+		$.post("saveProject.php",{action: "saveProject", data: JSON.stringify(data)}, function (data){
+			console.log(data);
+			if(data == "yes"){
+				alert("Inserted.");
+				window.location.href = "projects.php";
+			} else{
+				alert("Can't save project.");
+			}
+		});
 
 	});
 	$("#addContacts").click(function(){
