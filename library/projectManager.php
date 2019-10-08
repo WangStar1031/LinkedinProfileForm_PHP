@@ -6,22 +6,22 @@
 	ob_implicit_flush(true);
 	set_time_limit(0);
 
-	define("DB_TYPE", "mysql");
-	define("DB_HOST", "localhost");
+	if(!defined("DB_TYPE")) define("DB_TYPE", "mysql");
+	if(!defined("DB_HOST")) define("DB_HOST", "localhost");
 
 	if(@file_get_contents(__DIR__."/localhost")){
-		define("DB_NAME", "linkedin_profiles");
-		define("DB_USER", "root");
-		define("DB_PASSWORD", "");
+		if(!defined("DB_NAME")) define("DB_NAME", "linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "root");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "");
 	} else if( @file_get_contents(__DIR__ . "/nodelbma")){
-		define("DB_NAME", "nodelbma_linkedin_profiles");
-		define("DB_USER", "nodelbma_user1");
-		define("DB_PASSWORD", "123guraud!");
+		if(!defined("DB_NAME")) define("DB_NAME", "nodelbma_linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "nodelbma_user1");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "123guraud!");
 	}
 	else{
-		define("DB_NAME", "linkedin_profiles");
-		define("DB_USER", "root");
-		define("DB_PASSWORD", "123guraud!");
+		if(!defined("DB_NAME")) define("DB_NAME", "linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "root");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "123guraud!");
 	}
 	require_once __DIR__ . "/Mysql.php";
 
@@ -55,7 +55,7 @@
 		$lstAddContacts = $_data->lstAddContacts;
 
 		global $db;
-		$sql = "INSERT INTO projects(clientFirm, clientContacts, projectTitle, projectType, projectDescription, projectPracticeArea) VALUES ( ?, ?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO projects(clientFirm, clientContacts, projectTitle, projectType, projectDescription, projectPracticeArea, startedDate) VALUES ( ?, ?, ?, ?, ?, ?, NOW())";
 		$stmt = $db->prepare($sql);
 		$stmt->execute([$clientFirm, $clientContacts, $projectTitle, $projectType, $projectDescription, $projectPracticeArea]);
 		$id = $db->lastInsertId();
@@ -63,5 +63,26 @@
 		saveAddContacts($id, $lstAddContacts);
 		return true;
 	}
-
+	function getAllProjects($_search = ""){
+		global $db;
+		if( $_search == ""){
+			$sql = "SELECT * FROM projects";
+		} else{
+			$sql = "SELECT * FROM projects WHERE clientFirm LIKE '%$_search%' OR clientContacts LIKE '%$_search%' OR projectTitle LIKE '%$_search%' OR projectType LIKE '%$_search%' OR projectPracticeArea LIKE '%$_search%' OR projectDescription LIKE '%$_search%'";
+		}
+		$result = $db->select($sql);
+		return $result;
+	}
+	function getProjectInfo($_id){
+		global $db;
+		$sql = "SELECT * FROM projects WHERE Id = '$_id'";
+		$result = $db->select($sql);
+		return $result;
+	}
+	function getExperts4Project($_projectID){
+		global $db;
+		$sql = "SELECT * FROM experts_projects WHERE projectId = '$_projectID'";
+		$result = $db->select($sql);
+		return $result;
+	}
 ?>

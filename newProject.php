@@ -53,7 +53,7 @@
 	}
 </style>
 <div class="topBar col-lg-12">
-	<a href="main.php">
+	<a href="projects.php">
 		<img src="assets/imgs/vision-logo.png">
 		<span class="topTitle"><strong>Nodes</strong></span>
 	</a>

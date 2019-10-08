@@ -6,22 +6,22 @@
 	ob_implicit_flush(true);
 	set_time_limit(0);
 
-	define("DB_TYPE", "mysql");
-	define("DB_HOST", "localhost");
+	if(!defined("DB_TYPE")) define("DB_TYPE", "mysql");
+	if(!defined("DB_HOST")) define("DB_HOST", "localhost");
 
 	if(@file_get_contents(__DIR__."/localhost")){
-		define("DB_NAME", "linkedin_profiles");
-		define("DB_USER", "root");
-		define("DB_PASSWORD", "");
+		if(!defined("DB_NAME")) define("DB_NAME", "linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "root");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "");
 	} else if( @file_get_contents(__DIR__ . "/nodelbma")){
-		define("DB_NAME", "nodelbma_linkedin_profiles");
-		define("DB_USER", "nodelbma_user1");
-		define("DB_PASSWORD", "123guraud!");
+		if(!defined("DB_NAME")) define("DB_NAME", "nodelbma_linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "nodelbma_user1");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "123guraud!");
 	}
 	else{
-		define("DB_NAME", "linkedin_profiles");
-		define("DB_USER", "root");
-		define("DB_PASSWORD", "123guraud!");
+		if(!defined("DB_NAME")) define("DB_NAME", "linkedin_profiles");
+		if(!defined("DB_USER")) define("DB_USER", "root");
+		if(!defined("DB_PASSWORD")) define("DB_PASSWORD", "123guraud!");
 	}
 	require_once __DIR__ . "/Mysql.php";
 
@@ -309,6 +309,10 @@
 			// $retVal->profiles = $record;
 		}
 		return $retVal;
+	}
+	function getProfileFromId($_id){
+		global $db;
+		return $db->select("SELECT * FROM profiles WHERE Id = '$_id'");
 	}
 	function getProfiles($_email, $_pageNum = 0, $_offset = 20){
 		global $db;

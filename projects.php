@@ -10,15 +10,17 @@
 	if( $userEmail == "")
 		header("Location: login.php?from=projects.php");
 	require_once __DIR__ . '/library/userManager.php';
+	require_once __DIR__ . '/library/projectManager.php';
 
 	include("assets/components/header.php");
-
+	$search = "";
+	if( isset($_POST['search'])) $search = $_POST['search'];
 ?>
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/mainProjects.css?<?= time();?>">
 <div class="topBar col-lg-12">
-	<a href="main.php">
+	<a href="projects.php">
 		<img src="assets/imgs/vision-logo.png">
 		<span class="topTitle"><strong>Nodes</strong></span>
 	</a>
@@ -37,7 +39,7 @@
 			<div class="row">
 				<form class="searchForm search-container col-lg-6" method="POST">
 						<i class="fa fa-search searchIcon" aria-hidden="true"></i>
-						<input class="form-control" type="text" placeholder="Search" aria-label="Search">
+						<input class="form-control" type="text" placeholder="Search" aria-label="Search" name="search" value="<?=$search?>">
 				</form>
 				<div class="col-lg-6">
 					<button class="btn btn-success newProject" style="float: right;">+ NEW </button>
@@ -54,6 +56,20 @@
 				<th>Experts Attached</th>
 				<th>Calls</th>
 			</tr>
+			<?php
+			$projects = getAllProjects($search);
+			if( $projects){
+				foreach ($projects as $project) {
+				?>
+				<tr>
+					<td><a href="projectDetails.php?project=<?=$project['Id']?>"><?=$project["projectTitle"]?></a></td>
+					<td><?=$project["clientFirm"]?></td>
+					<td><?=$project["startedDate"]?></td>
+				</tr>
+				<?php
+				}
+			}
+			?>
 		</table>
 	</div>
 </div>
