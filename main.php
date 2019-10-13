@@ -155,7 +155,7 @@ include("assets/components/header.php");
 				$employHistory = $profile["employHistory"];
 				$educationHistory = $profile["educationHistory"];
 			?>
-			<tr>
+			<tr profileId="<?=$profileId?>">
 				<td><?=$rowIndex?><span class="profileUrl HideItem"><?=$profileUrl?></span></td>
 				<td style="width: 40%;">
 					<div>
@@ -200,7 +200,7 @@ include("assets/components/header.php");
 					<p><b>Industry : </b><?=$industry?></p>
 					<p><b>Geography : </b><?=$country?></p>
 					<button class="btn btn-disable" onclick="btnSaveClicked(this)">Save</button>
-					<button class="btn btn-danger" onclick="btnRemoveClicked(this)">Remove</button>
+					<button class="btn btn-danger" onclick="removeProfile('<?=$profileId?>')">Remove</button>
 				</td>
 			</tr>
 
@@ -350,6 +350,14 @@ include("assets/components/header.php");
 				$(this).parent().find("span").removeClass("HideItem");
 				$(this).addClass("HideItem");
 			}
+		});
+	}
+	function removeProfile(_id){
+		var txt;
+		var r = confirm("Are you sure remove current profile?");
+		if (r != true) return;
+		$.post("api_getProfiles.php", {case: 'removeProfile', profileId: _id}, function (data){
+			document.location.reload();
 		});
 	}
 	function btnRemoveClicked(_this){

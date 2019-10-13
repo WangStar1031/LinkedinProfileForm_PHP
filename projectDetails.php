@@ -62,7 +62,18 @@
 <div class="mainProjects col-lg-12">
 	<div class="row">
 		<div class="mainTitle col-lg-12">
+			<?php
+			if( $edit == 1){
+			?>
 			<h2><?=$curProject['projectTitle']?></h2>
+			<!-- <h2>Title : <span><input type="text" name="projectTitle" value="<?=$curProject['projectTitle']?>"></span></h2> -->
+			<?php
+			} else{
+			?>
+			<h2><?=$curProject['projectTitle']?></h2>
+			<?php
+			}
+			?>
 		</div>
 	</div>
 	<div class="row">
@@ -275,6 +286,8 @@
 	}
 	function onSave(){
 		var profileDivs = $(".profileSection");
+		var projectTitle = $("input[name=projectTitle]").val();
+		
 		var arrExperts = [];
 		for( var i = 0; i < profileDivs.length; i++){
 			var curExpertDiv = profileDivs.eq(i);

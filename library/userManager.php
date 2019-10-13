@@ -59,7 +59,12 @@
 		$sql = "UPDATE profiles SET FirstName=?, LastName=?, Email=?, PhoneNumber=?, Biography=? WHERE ProfileUrl=?";
 		$stmt= $db->prepare($sql);
 		$stmt->execute([$firstName, $lastName, $email, $phoneNumber, $biography, $_profileUrl]);
-	}	
+	}
+	function removeProfileWithId($profileId){
+		global $db;
+		$strsql = "DELETE FROM profiles WHERE Id='$profileId'";
+		$db->__exec__($strsql);
+	}
 	function removeProfile($_profileUrl){
 		global $db;
 		$strsql = "delete from profiles where ProfileUrl='$_profileUrl'";
@@ -352,54 +357,5 @@
 		}
 		$retStr .= "</table>";
 		return $retStr;
-	}
-	function addExperts($projectId, $ids){
-		global $db;
-		$arrIds = explode(",", $ids);
-		foreach ($arrIds as $value) {
-			if( !$db->select("SELECT * FROM experts_projects WHERE projectId='$projectId' AND profileId='$value'") ){
-				$sql = "INSERT INTO experts_projects(projectId, profileId) VALUES (?,?)";
-				$stmt = $db->prepare($sql);
-				$stmt->execute([$projectId, intval($value)]);
-			}
-		}
-		return "yes";
-	}
-	function modifyExperts($projectId, $arrExperts){
-		global $db;
-		foreach ($arrExperts as $curExpert) {
-			$profileId = $curExpert->profileId;
-			$projectStatus = $curExpert->projectStatus;
-			$sale = intval($curExpert->sale);
-			$phone2 = $curExpert->phone2;
-
-			$PhoneNumber = $curExpert->PhoneNumber;
-			$Email = $curExpert->Email;
-			$ProfileUrl = $curExpert->ProfileUrl;
-			$Country = $curExpert->Country;
-			
-			$sql = "UPDATE profiles SET Country=?, Email=?, ProfileUrl=?, PhoneNumber=? WHERE Id=?";
-			$stmt= $db->prepare($sql);
-			$stmt->execute([$Country, $Email, $ProfileUrl, $PhoneNumber, $profileId]);
-
-			$sql = "UPDATE experts_projects SET projectStatus=?, sale=?, phone2=? WHERE projectId=? AND profileId=?";
-			$stmt= $db->prepare($sql);
-			$stmt->execute([$projectStatus, $sale, $phone2, $projectId, $profileId]);
-		}
-		return "yes";
-	}
-	function removeExpert($projectId, $profileId){
-		global $db;
-		$strsql = "DELETE FROM experts_projects WHERE projectId='$projectId' AND profileId='$profileId'";
-		$db->__exec__($strsql);
-		return "yes";
-	}
-	function removeProject($projectId){
-		global $db;
-		$db->__exec__("DELETE FROM projects WHERE Id='$projectId'");
-		$db->__exec__("DELETE FROM clientaddcontact WHERE projectId='$projectId'");
-		$db->__exec__("DELETE FROM experts_projects WHERE projectId='$projectId'");
-		$db->__exec__("DELETE FROM questions WHERE projectId='$projectId'");
-		return "yes";
 	}
 ?>

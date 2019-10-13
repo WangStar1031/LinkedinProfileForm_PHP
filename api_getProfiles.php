@@ -7,6 +7,7 @@
 	error_reporting(E_ALL);
 
 	require_once __DIR__ . "/library/userManager.php";
+	require_once __DIR__ . "/library/projectManager.php";
 
 	$case = '';
 	if( isset($_GET['case'])) $case = $_GET['case'];
@@ -26,6 +27,12 @@
 				modifyProfile($profileUrl, $profile);
 			}
 			break;
+		case 'removeProfile':
+			$profileId = '';
+			if( isset($_GET['profileId'])) $profileId = $_GET['profileId'];
+			if( isset($_POST['profileId'])) $profileId = $_POST['profileId'];
+			removeProfileWithId($profileId);
+		break;
 		case 'remove':
 			$profileUrl = '';
 			if( isset($_GET['profileUrl'])) $profileUrl = $_GET['profileUrl'];

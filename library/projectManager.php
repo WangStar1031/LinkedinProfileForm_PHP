@@ -43,6 +43,14 @@
 			$stmt->execute([$id, $value]);
 		}
 	}
+	function saveProfileExperts($id, $lstExperts){
+		global $db;
+		foreach ($lstExperts as $value) {
+			$sql = "INSERT INTO experts_projects(projectId, profileId) VALUES(?,?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$id, $value]);
+		}
+	}
 	function saveProject($_data){
 		$clientFirm = $_data->clientFirm;
 		$clientContacts = $_data->clientContact;
@@ -73,6 +81,7 @@
 
 		$lstProfileQuestions = $_data->lstProfileQuestions;
 		$lstAddContacts = $_data->lstAddContacts;
+		$lstExperts = $_data->lstExperts;
 
 		global $db;
 		$sql = "INSERT INTO projects(clientFirm, clientContacts, projectTitle, projectType, projectDescription, projectPracticeArea, startedDate) VALUES ( ?, ?, ?, ?, ?, ?, NOW())";
@@ -81,6 +90,8 @@
 		$id = $db->lastInsertId();
 		saveProfileQuestions($id, $lstProfileQuestions);
 		saveAddContacts($id, $lstAddContacts);
+		saveProfileExperts($id, $lstExperts);
+
 		return $id;
 	}
 	function getAllProjects($_search = ""){
@@ -98,6 +109,18 @@
 		$sql = "SELECT * FROM projects WHERE Id = '$_id'";
 		$result = $db->select($sql);
 		return $result;
+	}
+	function getProjectExperts($_projectID){
+		global $db;
+		$sql = "SELECT profileId FROM experts_projects WHERE projectId = '$_projectID'";
+		$result = $db->select($sql);
+		$retVal = [];
+		if( !$result)
+			return $retVal;
+		foreach ($result as $record) {
+			$retVal[] = intval($record['profileId']);
+		}
+		return $retVal;
 	}
 	function getProjectCientAddContact($_id){
 		global $db;
@@ -144,6 +167,56 @@
 
 		$_data->lstProfileQuestions = getProjectQuestions($_projectID);
 		$_data->lstAddContacts = getProjectCientAddContact($_projectID);
+		$_data->lstExperts = getProjectExperts($_projectID);
 		cloneProject($_data);
+	}
+	function addExperts($projectId, $ids){
+		global $db;
+		$arrIds = explode(",", $ids);
+		foreach ($arrIds as $value) {
+			if( !$db->select("SELECT * FROM experts_projects WHERE projectId='$projectId' AND profileId='$value'") ){
+				$sql = "INSERT INTO experts_projects(projectId, profileId) VALUES (?,?)";
+				$stmt = $db->prepare($sql);
+				$stmt->execute([$projectId, intval($value)]);
+			}
+		}
+		return "yes";
+	}
+	function modifyExperts($projectId, $arrExperts){
+		global $db;
+		foreach ($arrExperts as $curExpert) {
+			$profileId = $curExpert->profileId;
+			$projectStatus = $curExpert->projectStatus;
+			$sale = intval($curExpert->sale);
+			$phone2 = $curExpert->phone2;
+
+			$PhoneNumber = $curExpert->PhoneNumber;
+			$Email = $curExpert->Email;
+			$ProfileUrl = $curExpert->ProfileUrl;
+			$Country = $curExpert->Country;
+			
+			$sql = "UPDATE profiles SET Country=?, Email=?, ProfileUrl=?, PhoneNumber=? WHERE Id=?";
+			$stmt= $db->prepare($sql);
+			$stmt->execute([$Country, $Email, $ProfileUrl, $PhoneNumber, $profileId]);
+
+			$sql = "UPDATE experts_projects SET projectStatus=?, sale=?, phone2=? WHERE projectId=? AND profileId=?";
+			$stmt= $db->prepare($sql);
+			$stmt->execute([$projectStatus, $sale, $phone2, $projectId, $profileId]);
+		}
+		return "yes";
+	}
+	function removeExpert($projectId, $profileId){
+		global $db;
+		$strsql = "DELETE FROM experts_projects WHERE projectId='$projectId' AND profileId='$profileId'";
+		$db->__exec__($strsql);
+		return "yes";
+	}
+	function removeProject($projectId){
+		global $db;
+		$db->__exec__("DELETE FROM projects WHERE Id='$projectId'");
+		$db->__exec__("DELETE FROM clientaddcontact WHERE projectId='$projectId'");
+		$db->__exec__("DELETE FROM experts_projects WHERE projectId='$projectId'");
+		$db->__exec__("DELETE FROM questions WHERE projectId='$projectId'");
+		return "yes";
 	}
 ?>
