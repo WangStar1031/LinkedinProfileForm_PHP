@@ -72,6 +72,7 @@
 			</div>
 			<div style="float: left;"><span>Loreal</span>, <span><?=$curProject['clientFirm']?></span></div>
 			<div style="float: right;">
+				<button onclick="deleteProject('<?=$id?>')" class="btn btn-danger">Delete</button>
 				<?php
 				if( $edit == 1){
 				?>
@@ -102,12 +103,13 @@
 			$i = 0;
 			foreach ($experts as $curExpert) {
 				$i++;
-				$expertProfile = getProfileFromId($curExpert['profileId'])[0];
+				$profileId = $curExpert['profileId'];
+				$expertProfile = getProfileFromId($profileId)[0];
 			?>
-			<div profileId="<?=$curExpert['profileId']?>" class="col-lg-12 profileSection <?= $i%2?'odd':''?>">
+			<div profileId="<?=$profileId?>" class="col-lg-12 profileSection <?= $i%2?'odd':''?>">
 				<div class="row">
 					<div class="col-lg-12">
-						<h4><?=$i?>) <?= $expertProfile['FirstName'] . ' ' . $expertProfile['LastName']?></h4>
+						<h4><?=$i?>) <?= $expertProfile['FirstName'] . ' ' . $expertProfile['LastName']?> <span><button class="btn btn-danger" onclick="onDelete('<?=$profileId?>')">Delete</button></span></h4>
 					</div>
 					<div class="col-lg-6 col-md-6">
 						<div>
@@ -293,5 +295,23 @@
 				window.location.href = "projectDetails.php?project=<?=$id?>";
 			}
 		})
+	}
+	function onDelete(_profileId){
+		if( confirm("Are you sure delete this expert?") == true){
+			$.post("api_getProfiles.php", {case: "removeExpert", projectId: "<?=$id?>", profileId: _profileId}, function(data){
+				if( data == "yes"){
+					window.location.reload();
+				}
+			});
+		}
+	}
+	function deleteProject(_projectId){
+		if( confirm("Are you sure delete current project?") == true){
+			$.post("api_getProfiles.php", {case: "removeProject", projectId: _projectId}, function(data){
+				if( data == "yes"){
+					window.location.reload();
+				}
+			});
+		}
 	}
 </script>

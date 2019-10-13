@@ -63,6 +63,26 @@
 		saveAddContacts($id, $lstAddContacts);
 		return true;
 	}
+	function cloneProject($_data){
+		$clientFirm = $_data->clientFirm;
+		$clientContacts = $_data->clientContact;
+		$projectTitle = $_data->projectTitle;
+		$projectType = $_data->projectType;
+		$projectDescription = $_data->projectDesc;
+		$projectPracticeArea = $_data->practiceArea;
+
+		$lstProfileQuestions = $_data->lstProfileQuestions;
+		$lstAddContacts = $_data->lstAddContacts;
+
+		global $db;
+		$sql = "INSERT INTO projects(clientFirm, clientContacts, projectTitle, projectType, projectDescription, projectPracticeArea, startedDate) VALUES ( ?, ?, ?, ?, ?, ?, NOW())";
+		$stmt = $db->prepare($sql);
+		$stmt->execute([$clientFirm, $clientContacts, $projectTitle, $projectType, $projectDescription, $projectPracticeArea]);
+		$id = $db->lastInsertId();
+		saveProfileQuestions($id, $lstProfileQuestions);
+		saveAddContacts($id, $lstAddContacts);
+		return $id;
+	}
 	function getAllProjects($_search = ""){
 		global $db;
 		if( $_search == ""){
@@ -79,10 +99,51 @@
 		$result = $db->select($sql);
 		return $result;
 	}
+	function getProjectCientAddContact($_id){
+		global $db;
+		$sql = "SELECT contactName FROM clientaddcontact WHERE projectId = '$_id'";
+		$result = $db->select($sql);
+		$retVal = [];
+		if( !$result)
+			return $retVal;
+		foreach ($result as $record) {
+			$retVal[] = $record['contactName'];
+		}
+		return $result;
+	}
+	function getProjectQuestions($_id){
+		global $db;
+		$sql = "SELECT question FROM questions WHERE projectId = '$_id'";
+		$result = $db->select($sql);
+		$retVal = [];
+		if( !$result)
+			return $retVal;
+		foreach ($result as $record) {
+			$retVal[] = $record['contactName'];
+		}
+		return $result;
+	}
 	function getExperts4Project($_projectID){
 		global $db;
 		$sql = "SELECT * FROM experts_projects WHERE projectId = '$_projectID'";
 		$result = $db->select($sql);
 		return $result;
+	}
+	function copyProject($_projectID){
+		global $db;
+		$records = getProjectInfo($_projectID);
+		if( !$records)return false;
+		$record = $records[0];
+		$_data = new \stdClass;
+		$_data->clientFirm = $record['clientFirm'];
+		$_data->clientContact = $record['clientContacts'];
+		$_data->projectTitle = $record['projectTitle'];
+		$_data->projectType = $record['projectType'];
+		$_data->projectDesc = $record['projectDescription'];
+		$_data->practiceArea = $record['projectPracticeArea'];
+
+		$_data->lstProfileQuestions = getProjectQuestions($_projectID);
+		$_data->lstAddContacts = getProjectCientAddContact($_projectID);
+		cloneProject($_data);
 	}
 ?>

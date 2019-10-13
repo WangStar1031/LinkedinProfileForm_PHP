@@ -388,4 +388,18 @@
 		}
 		return "yes";
 	}
+	function removeExpert($projectId, $profileId){
+		global $db;
+		$strsql = "DELETE FROM experts_projects WHERE projectId='$projectId' AND profileId='$profileId'";
+		$db->__exec__($strsql);
+		return "yes";
+	}
+	function removeProject($projectId){
+		global $db;
+		$db->__exec__("DELETE FROM projects WHERE Id='$projectId'");
+		$db->__exec__("DELETE FROM clientaddcontact WHERE projectId='$projectId'");
+		$db->__exec__("DELETE FROM experts_projects WHERE projectId='$projectId'");
+		$db->__exec__("DELETE FROM questions WHERE projectId='$projectId'");
+		return "yes";
+	}
 ?>

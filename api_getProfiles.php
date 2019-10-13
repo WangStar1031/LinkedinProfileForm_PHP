@@ -95,6 +95,21 @@
 			$arrExperts = json_decode($experts);
 			echo modifyExperts($projectId, $arrExperts);
 		break;
+		case 'removeExpert':
+			$projectId = '';
+			if( isset($_GET['projectId'])) $projectId = trim($_GET['projectId']);
+			if( isset($_POST['projectId'])) $projectId = trim($_POST['projectId']);
+			$profileId = '';
+			if( isset($_GET['profileId'])) $profileId = trim($_GET['profileId']);
+			if( isset($_POST['profileId'])) $profileId = trim($_POST['profileId']);
+			echo removeExpert($projectId, $profileId);
+		break;
+		case 'removeProject':
+			$projectId = '';
+			if( isset($_GET['projectId'])) $projectId = trim($_GET['projectId']);
+			if( isset($_POST['projectId'])) $projectId = trim($_POST['projectId']);
+			echo removeProject($projectId);
+		break;
 		default:
 			break;
 	}

@@ -48,7 +48,7 @@
 		</div>
 	</div>
 	<div class="mainContents">
-		<table class="col-lg-12">
+		<table style="width: 100%;">
 			<tr>
 				<th>Project Info</th>
 				<th>Client</th>
