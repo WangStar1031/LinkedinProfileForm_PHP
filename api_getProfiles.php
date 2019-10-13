@@ -60,6 +60,41 @@
 				echo "No.";
 			}
 		break;
+		case 'search':
+			$name = '';
+			if( isset($_GET['name'])) $name = trim($_GET['name']);
+			if( isset($_POST['name'])) $name = trim($_POST['name']);
+			$location = '';
+			if( isset($_GET['location'])) $location = trim($_GET['location']);
+			if( isset($_POST['location'])) $location = trim($_POST['location']);
+			$jobsFunction = '';
+			if( isset($_GET['jobsFunction'])) $jobsFunction = trim($_GET['jobsFunction']);
+			if( isset($_POST['jobsFunction'])) $jobsFunction = trim($_POST['jobsFunction']);
+			$industry = '';
+			if( isset($_GET['industry'])) $industry = trim($_GET['industry']);
+			if( isset($_POST['industry'])) $industry = trim($_POST['industry']);
+
+			echo SearchProfiles($name, $location, $jobsFunction, $industry);
+		break;
+		case 'addExperts':
+			$projectId = '';
+			if( isset($_GET['projectId'])) $projectId = trim($_GET['projectId']);
+			if( isset($_POST['projectId'])) $projectId = trim($_POST['projectId']);
+			$ids = '';
+			if( isset($_GET['ids'])) $ids = trim($_GET['ids']);
+			if( isset($_POST['ids'])) $ids = trim($_POST['ids']);
+			echo addExperts($projectId, $ids);
+		break;
+		case 'modifyExperts':
+			$projectId = '';
+			if( isset($_GET['projectId'])) $projectId = trim($_GET['projectId']);
+			if( isset($_POST['projectId'])) $projectId = trim($_POST['projectId']);
+			$experts = '';
+			if( isset($_GET['experts'])) $experts = trim($_GET['experts']);
+			if( isset($_POST['experts'])) $experts = trim($_POST['experts']);
+			$arrExperts = json_decode($experts);
+			echo modifyExperts($projectId, $arrExperts);
+		break;
 		default:
 			break;
 	}

@@ -325,4 +325,67 @@
 		}
 		return $record;
 	}
+	function SearchProfiles($_name, $_location, $_jobsFunction, $_industry){
+		global $db;
+		$records = $db->select("SELECT * FROM profiles WHERE (FirstName LIKE '%$_name%' OR LastName LIKE '%$_name%') AND Country LIKE '%$_location%' AND JobFunction LIKE '%$_jobsFunction%' AND Industry LIKE '%$_industry%'");
+		if( !$records )
+			return "";
+		$retStr = "";
+		$retStr .= "<table style='width:100%;'>";
+		$retStr .= "<tr>";
+			$retStr .= "<th></th>";
+			$retStr .= "<th>Name</th>";
+			// $retStr .= "<th>Title</th>";
+			$retStr .= "<th>Country</th>";
+			$retStr .= "<th>Industry</th>";
+			// $retStr .= "<th>Jobs Function</th>";
+		$retStr .= "</tr>";
+		foreach ($records as $record) {
+			$retStr .= "<tr id='" . $record['Id'] . "'>";
+				$retStr .= "<td>" . "<input type='checkbox'> " . "<img src='" . $record['ImageUrl'] . "'>" . "</td>";
+				$retStr .= "<td>" . $record['FirstName'] . " " . $record['LastName'] . "</td>";
+				// $retStr .= "<td>" . $record['ProfileTitle'] . "</td>";
+				$retStr .= "<td>" . $record['Country'] . "</td>";
+				$retStr .= "<td>" . $record['Industry'] . "</td>";
+				// $retStr .= "<td>" . $record['JobFunction'] . "</td>";
+			$retStr .= "</tr>";
+		}
+		$retStr .= "</table>";
+		return $retStr;
+	}
+	function addExperts($projectId, $ids){
+		global $db;
+		$arrIds = explode(",", $ids);
+		foreach ($arrIds as $value) {
+			if( !$db->select("SELECT * FROM experts_projects WHERE projectId='$projectId' AND profileId='$value'") ){
+				$sql = "INSERT INTO experts_projects(projectId, profileId) VALUES (?,?)";
+				$stmt = $db->prepare($sql);
+				$stmt->execute([$projectId, intval($value)]);
+			}
+		}
+		return "yes";
+	}
+	function modifyExperts($projectId, $arrExperts){
+		global $db;
+		foreach ($arrExperts as $curExpert) {
+			$profileId = $curExpert->profileId;
+			$projectStatus = $curExpert->projectStatus;
+			$sale = intval($curExpert->sale);
+			$phone2 = $curExpert->phone2;
+
+			$PhoneNumber = $curExpert->PhoneNumber;
+			$Email = $curExpert->Email;
+			$ProfileUrl = $curExpert->ProfileUrl;
+			$Country = $curExpert->Country;
+			
+			$sql = "UPDATE profiles SET Country=?, Email=?, ProfileUrl=?, PhoneNumber=? WHERE Id=?";
+			$stmt= $db->prepare($sql);
+			$stmt->execute([$Country, $Email, $ProfileUrl, $PhoneNumber, $profileId]);
+
+			$sql = "UPDATE experts_projects SET projectStatus=?, sale=?, phone2=? WHERE projectId=? AND profileId=?";
+			$stmt= $db->prepare($sql);
+			$stmt->execute([$projectStatus, $sale, $phone2, $projectId, $profileId]);
+		}
+		return "yes";
+	}
 ?>
