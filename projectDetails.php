@@ -28,6 +28,10 @@
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/mainProjects.css?<?= time();?>">
+
+<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+
 <div class="topBar col-lg-12">
 	<a href="projects.php">
 		<img src="assets/imgs/vision-logo.png">
@@ -74,7 +78,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h3 style="float: left;">Experts</h3>
-			<button class="btn btn-success" style="margin-left: 30px;">Add Expert</button>
+			<button class="btn btn-success" style="margin-left: 30px;" data-toggle="modal" data-target="#myModal">Add Expert</button>
 		</div>
 		<?php
 		$experts = getExperts4Project($id);
@@ -142,4 +146,23 @@
 		}
 		?>
 	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
