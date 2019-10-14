@@ -105,7 +105,7 @@
 		<div class="col-lg-12">
 			<div class="row">
 				<h3 style="float: left; margin-left: 30px;">Experts
-					<a href=""><button class="btn btn-success" style="margin-left: 30px;">Add Expert</button></a>
+					<a href="addExperts.php?project=<?=$id?>"><button class="btn btn-success" style="margin-left: 30px;">Add Expert</button></a>
 					<!-- <button class="btn btn-success" style="margin-left: 30px;" data-toggle="modal" data-target="#myModal">Add Expert</button> -->
 				</h3>
 			</div>
