@@ -104,7 +104,10 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="row">
-				<h3 style="float: left; margin-left: 30px;">Experts<button class="btn btn-success" style="margin-left: 30px;" data-toggle="modal" data-target="#myModal">Add Expert</button></h3>
+				<h3 style="float: left; margin-left: 30px;">Experts
+					<a href=""><button class="btn btn-success" style="margin-left: 30px;">Add Expert</button></a>
+					<!-- <button class="btn btn-success" style="margin-left: 30px;" data-toggle="modal" data-target="#myModal">Add Expert</button> -->
+				</h3>
 			</div>
 			
 		</div>
@@ -287,7 +290,7 @@
 	function onSave(){
 		var profileDivs = $(".profileSection");
 		var projectTitle = $("input[name=projectTitle]").val();
-		
+
 		var arrExperts = [];
 		for( var i = 0; i < profileDivs.length; i++){
 			var curExpertDiv = profileDivs.eq(i);

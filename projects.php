@@ -60,11 +60,19 @@
 			$projects = getAllProjects($search);
 			if( $projects){
 				foreach ($projects as $project) {
+					$projectId = $project['Id'];
+					$experts = getProjectExperts($projectId);
+					$strExperts = [];
+					foreach ($experts as $profileId) {
+						$profile = getProfileFromId($profileId)[0];
+						$strExperts[] = $profile['FirstName'] . " " . $profile['LastName'];
+					}
 				?>
 				<tr>
 					<td><a href="projectDetails.php?project=<?=$project['Id']?>"><?=$project["projectTitle"]?></a></td>
 					<td><?=$project["clientFirm"]?></td>
 					<td><?=$project["startedDate"]?></td>
+					<td><?=implode(", ", $strExperts)?></td>
 				</tr>
 				<?php
 				}
