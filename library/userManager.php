@@ -358,4 +358,79 @@
 		$retStr .= "</table>";
 		return $retStr;
 	}
+	function SearchProfiles4Project( $id, $strSearch, $hasGmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories){
+		global $db;
+		$sql = "select * from profiles ";
+		$where = "where 1";
+		if( $strSearch != ""){
+			$intelWhere = " and (";
+			$intelWhere .= " Prefix like '%" . $strSearch . "%'";
+			$intelWhere .= " or FirstName like '%" . $strSearch . "%'";
+			$intelWhere .= " or LastName like '%" . $strSearch . "%'";
+			$intelWhere .= " or Country like '%" . $strSearch . "%'";
+			$intelWhere .= " or Email like '%" . $strSearch . "%'";
+			$intelWhere .= " or PhoneNumber like '%" . $strSearch . "%'";
+			$intelWhere .= " or Industry like '%" . $strSearch . "%'";
+			$intelWhere .= " or ProfileTitle like '%" . $strSearch . "%'";
+			$intelWhere .= " or Biography like '%" . $strSearch . "%'";
+
+			$sql_com = "select distinct ProfileId from employment where CompanyName like '%" . $strSearch . "%'";
+			$comRecords = $db->select($sql_com);
+			$profiles = [];
+			if( $comRecords){
+				foreach ($comRecords as $proId) {
+					$profiles[] = $proId["ProfileId"];
+				}	
+			}
+			$sql_edu = "select distinct ProfileId from education where SchoolName like '%" . $strSearch . "%'";
+			$eduRecords = $db->select($sql_com);
+			if( $eduRecords){
+				foreach ($eduRecords as $proId) {
+					if( array_search( $proId["ProfileId"], $profiles) !== false){
+						$profiles[] = $proId["ProfileId"];
+					}
+				}
+			}
+			if( count($profiles)){
+				$intelWhere .= " and Id in (" . implode(",", $profiles) . ")";
+			}
+
+			$intelWhere .= ")";
+			$where .= $intelWhere;
+		}
+		if( $hasGmail == true){
+			$where .= " and Email like '%@gmail.com'";
+		}
+		if( $hasPhone == true){
+			$where .= " and PhoneNumber is not null";
+		}
+		if( $rate == true){
+
+		}
+		if( $signedTC == true){
+
+		}
+		if( $chkCompany == true){
+			
+		}
+		if( $chkGeograpy == true){
+			$arrCountries = explode(",", $strCountries);
+			if( count($arrCountries) != 0){
+				$where .= " and Country in (";
+				for( $i = 0; $i < count($arrCountries); $i++){
+					if( $i != 0){
+						$where .= ",";
+					}
+					$where .= '"' . $arrCountries[$i] . '"';
+				}
+				$where .= ")";
+			}
+		}
+		// $countRec = $db->select("select count(*) as count from profiles " . $where);
+		// $count = $countRec[0]['count'];
+		// $where .= " limit " . (($_pageNum-1) * $_recCount) . "," . $_recCount;
+		// print_r($sql . $where);
+		$record = $db->select($sql . $where);
+		return $record;
+	}
 ?>

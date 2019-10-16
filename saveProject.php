@@ -22,7 +22,11 @@
 			if( saveProject($_data) == true) echo "yes";
 			else echo "no";
 			break;
-		
+		case 'updateProject':
+			$_data = json_decode($data);
+			if( updateProject($_data) == true) echo "yes";
+			else echo "no";
+			break;
 		default:
 			# code...
 			break;

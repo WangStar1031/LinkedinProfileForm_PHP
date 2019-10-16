@@ -23,12 +23,42 @@
 	$curProject = $project[0];
 	include("assets/components/header.php");
 	include("library/countries.php");
-
-	if( isset($_POST['hasGmail'])){
-		echo "Gmail" . $_POST['hasGmail'];
-	}
-	if( isset($_POST['hasPhone'])){
-		echo "Phone" . $_POST['hasPhone'];
+	$profiles = [];
+	if( isset($_POST['project'])){
+		$strSearch = "";
+		if( isset($_POST['strSearch'])) $strSearch = $_POST['strSearch'];
+		$hasGmail = "";
+		if( isset($_POST['hasGmail'])) $hasGmail = $_POST['hasGmail'] == "on" ? "gmail.com" : "";
+		$hasPhone = false;
+		if( isset($_POST['hasPhone'])) $hasPhone = $_POST['hasPhone'] == "on" ? true : false;
+		$rate = false;
+		$fromSale = 0;
+		$toSale = -1;
+		if( isset($_POST['rate'])) {
+			$rate = $_POST['rate'] == "on" ? true : false;
+			if( isset($_POST['fromSale'])) $fromSale = $_POST['fromSale'];
+			if( isset($_POST['toSale'])) $toSale = $_POST['toSale'];
+		}
+		$signedTC = false;
+		if( isset($_POST['signedTC'])) $signedTC = $_POST['signedTC'] == "on" ? true : false;
+		$chkCompany = false;
+		if( isset($_POST['chkCompany'])) $chkCompany = $_POST['chkCompany'] == "on" ? true : false;
+		$strCompanies = "";
+		if( isset($_POST['strCompanies'])) $strCompanies = $_POST['strCompanies'];
+		$chkGeograpy = false;
+		if( isset($_POST['chkGeograpy'])) $chkGeograpy = $_POST['chkGeograpy'] == "on" ? true : false;
+		$strCountries = "";
+		if( isset($_POST['strCountries'])) $strCountries = $_POST['strCountries'];
+		$projectHistory = false;
+		$strProjectHistories = "";
+		if( isset($_POST['projectHistory'])) {
+			$projectHistory = $_POST['projectHistory'] == "on" ? true : false;
+			if( isset($_POST['strProjectHistories'])) $strProjectHistories = $_POST['strProjectHistories'];
+		}
+		$profiles = SearchProfiles4Project( $id, $strSearch, $hasGmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories);
+		// print_r(count($profiles));
+		// echo "<br>";
+		// print_r($profiles);
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
@@ -60,7 +90,7 @@
 			<h2><?=$curProject['projectTitle']?> <span><a href="projectDetails.php?project=<?=$id?>"><button class="btn btn-normal">Back to project</button></a></span></h2>
 		</div>
 	</div>
-	<form class="row searchOptions" action="?project=<?=$id?>" method="POST">
+	<form class="row searchOptions" action="?project=<?=$id?>" method="POST" onsubmit="return checkForms()">
 		<input type="hidden" name="project" value="<?=$id?>">
 		<div class="col-lg-12">
 			<!-- <div class="row"> -->
@@ -80,22 +110,25 @@
 					<input type="checkbox" name="hasGmail" id="hasGmail"> <label for="hasGmail"> Has Gmail Address</label><br>
 					<input type="checkbox" name="hasPhone" id="hasPhone"> <label for="hasPhone"> Has Phone Number</label><br>
 					<input type="checkbox" name="rate" id="rate"> <label for="rate">Rate</label><span> $ <input type="number" name="fromSale"> to $ <input type="number" name="toSale"></span><br>
-					<input type="checkbox" name="signedTC" id="signedTC"> <label for="signedTC">Company <span><input type="text" id="strCompany"></span> <span><button class="btn-primary btn">Add</button></span></label>
-					<div id="companies"></div>
+					<input type="checkbox" name="signedTC" id="signedTC"> <label for="signedTC">Signed T&C</label><br>
+					<input type="checkbox" name="chkCompany"> <label> Company </label> <span><input type="text" id="strCompany"></span> <span><div class="btn-primary btn" onclick="addCompany()">Add</div></span>
+					<input type="hidden" name="strCompanies">
+					<div id="companies" class="subSection"></div>
 
-					<input type="checkbox" name="chkGeograpy" id="chkGeograpy"> <label for="chkGeograpy">Geography </label><span class="glyphicon glyphicon-menu-down" onclick="geoClicked(this)"></span>
+					<input type="checkbox" name="chkGeograpy" id="chkGeograpy"> <label for="chkGeograpy">Geography </label> <span class="glyphicon glyphicon-menu-down" onclick="geoClicked(this)"></span>
+					<input type="hidden" name="strCountries">
 					<div id="GeographySection">
 						<?php
 						foreach ($continents as $continent) {
 						?>
 						<div class="subSection hideItem">
 							
-						<input type="checkbox" id="<?=$continent?>" onchange="continentChanged(this)"> <label for="<?=$continent?>"><?=$continent?></label><span class="glyphicon glyphicon-menu-down" onclick="continentClicked(this)"></span><br>
+						<input type="checkbox" id="<?=$continent?>" onchange="continentChanged(this)"> <label for="<?=$continent?>"><?=$continent?></label> <span class="glyphicon glyphicon-menu-down" onclick="continentClicked(this)"></span><br>
 						<?php
 							foreach ($countries as $key => $country) {
 								if( $country['continent'] != $continent) continue;
 						?>
-							<div class="subSection hideItem">
+							<div class="subSection hideItem country">
 								<input type="checkbox" id="<?=$country['country']?>"> <label for="<?=$country['country']?>"><?=$country['country']?></label>
 							</div>
 						<?php
@@ -107,8 +140,9 @@
 						?>
 					</div>
 
-					<input type="checkbox" name="projectHistory" id="projectHistory"> <label for="projectHistory">Project History <span><input type="text" id="strHistory"></span> <span><button class="btn-primary btn">Add</button></span></label>
-					<div id="histories"></div>
+					<input type="checkbox" name="projectHistory" id="projectHistory"> <label for="projectHistory">Project History </label> <span><input type="text" id="strHistory"></span> <span><div class="btn-primary btn" onclick="addProjectHistory()">Add</div></span>
+					<input type="hidden" name="strProjectHistories">
+					<div id="histories" class="subSection"></div>
 					
 				</div>
 			</div>
@@ -126,13 +160,6 @@
 			$(".filterOptions").show();
 			$(_this).html("Hide filters");
 		}
-	}
-	function geoChecked(){
-		// if( $("#chkGeograpy").prop("checked") == true){
-		// 	$("#GeographySection > div.subSection").removeClass("hideItem")
-		// } else{
-		// 	$("#GeographySection > div.subSection").addClass("hideItem")
-		// }
 	}
 	function geoClicked(_this){
 		if( $(_this).hasClass("glyphicon-menu-down")){
@@ -157,8 +184,49 @@
 			$(_this).parent().find("div.subSection").addClass("hideItem");
 		}
 	}
-// natashakmorgan@gmail.com
-// natasha morgan
-// 104 roslyn street burwood, vic 3125 australia
+	function addCompany(){
+		var lstCompanies = [];
+		var strBuf = $("#companies").html();
+		if( strBuf)
+			lstCompanies = strBuf.split(", ");
+		var curCompany = $("#strCompany").val();
+		if( !curCompany)return;
+		$("#strCompany").val("");
+		$("#strCompany").focus();
+		if( lstCompanies.indexOf(curCompany) != -1){
+			return false;
+		}
+		lstCompanies.push( curCompany);
+		$("#companies").html(lstCompanies.join(", "));
+		return false;
+	}
+	function addProjectHistory(){
+		var lstHistories = [];
+		var strBuf = $("#histories").html();
+		if( strBuf)
+			lstHistories = strBuf.split(", ");
+		var curProject = $("#strHistory").val();
+		if( !curProject)return;
+		$("#strHistory").val("");
+		$("#strHistory").focus();
+		if( lstHistories.indexOf(curProject) != -1){
+			return false;
+		}
+		lstHistories.push( curProject);
+		$("#histories").html(lstHistories.join(", "));
+		return false;
+	}
+	function checkForms(){
+		$("input[name=strCompanies]").val($("#companies").html());
+		$("input[name=strProjectHistories]").val($("#histories").html());
+		var chkedCountries = $(".country input:checked");
+		var arrBuff = [];
+		for( var i = 0; i < chkedCountries.length; i++){
+			arrBuff.push(chkedCountries.eq(i).attr("id"));
+		}
+		$("input[name=strCountries]").val(arrBuff.join(","));
+		
+		return true;
+	}
 </script>
 

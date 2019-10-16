@@ -27,10 +27,30 @@
 
 	$db = new Mysql();
 	$db->exec("set names utf8");
+	function updateProfileQuestions($projectId, $lstProfileQuestions){
+		global $db;
+		$sql = "DELETE FROM questions WHERE projectId='$projectId'";
+		$db->__exec__($sql);
+		foreach ($lstProfileQuestions as $value) {
+			$sql = "INSERT INTO questions(projectId, question) VALUES(?,?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$id, $value]);
+		}
+	}
 	function saveProfileQuestions($id, $lstProfileQuestions){
 		global $db;
 		foreach ($lstProfileQuestions as $value) {
 			$sql = "INSERT INTO questions(projectId, question) VALUES(?,?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$id, $value]);
+		}
+	}
+	function updateAddContacts($projectId, $lstAddContacts){
+		global $db;
+		$sql = "DELETE FROM clientaddcontact WHERE projectId='$projectId'";
+		$db->__exec__($sql);
+		foreach ($lstAddContacts as $value) {
+			$sql = "INSERT INTO clientaddcontact(projectId, contactName) VALUES(?,?)";
 			$stmt = $db->prepare($sql);
 			$stmt->execute([$id, $value]);
 		}
@@ -50,6 +70,29 @@
 			$stmt = $db->prepare($sql);
 			$stmt->execute([$id, $value]);
 		}
+	}
+	function updateProject($_data){
+		$projectId = $_data->projectId;
+		$clientFirm = $_data->clientFirm;
+		$clientContacts = $_data->clientContact;
+		$projectTitle = $_data->projectTitle;
+		$projectType = $_data->projectType;
+		$projectDescription = $_data->projectDesc;
+		$projectPracticeArea = $_data->practiceArea;
+
+		$lstProfileQuestions = $_data->lstProfileQuestions;
+		$lstAddContacts = $_data->lstAddContacts;
+
+		global $db;
+		$sql = "UPDATE projects SET clientFirm = ?, clientContacts = ?, projectTitle = ?, projectType = ?, projectDescription = ?, projectPracticeArea = ? WHERE Id=?";
+		// echo $sql;
+		// $sql = "INSERT INTO projects(clientFirm, clientContacts, projectTitle, projectType, projectDescription, projectPracticeArea, startedDate) VALUES ( ?, ?, ?, ?, ?, ?, NOW())";
+		$stmt = $db->prepare($sql);
+		$stmt->execute([$clientFirm, $clientContacts, $projectTitle, $projectType, $projectDescription, $projectPracticeArea, $projectId]);
+		// $id = $db->lastInsertId();
+		updateProfileQuestions($projectId, $lstProfileQuestions);
+		updateAddContacts($projectId, $lstAddContacts);
+		return true;
 	}
 	function saveProject($_data){
 		$clientFirm = $_data->clientFirm;
@@ -142,7 +185,7 @@
 		if( !$result)
 			return $retVal;
 		foreach ($result as $record) {
-			$retVal[] = $record['contactName'];
+			$retVal[] = $record['question'];
 		}
 		return $result;
 	}

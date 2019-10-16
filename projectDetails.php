@@ -92,7 +92,7 @@
 				<?php
 				} else{
 				?>
-				<a href="projectDetails.php?project=<?=$id?>&edit=1"><button class="btn btn-primary">Edit</button></a>
+				<a href="editProject.php?project=<?=$id?>"><button class="btn btn-primary">Edit</button></a>
 				<a href="copyProject.php?project=<?=$id?>"><button class="btn btn-primary">Copy</button></a>
 				<?php
 				}

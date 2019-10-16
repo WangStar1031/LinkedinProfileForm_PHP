@@ -1,0 +1,33 @@
+	.smallButton{
+		margin-left: 20px;
+		cursor: pointer;
+		border-radius: 100%;
+		background-color: green;
+		color: white;
+		padding: 0px 4px;
+	}
+	.required:after{
+		content: "*";
+		color: red;
+		margin-left: 10px;
+	}
+	.addContactField{
+		width: calc(100% - 50px);
+		float: left;
+	}
+	.delContact, .delQuestion{
+		float: right;
+	}
+	#clientAddContact > div{
+		margin-bottom: 10px;
+	}
+	.question{
+		width: calc(100% - 50px);
+		float: left;
+	}
+	#lstQuestions{
+		margin-top: 10px;
+	}
+	#lstQuestions > div{
+		margin-bottom: 10px;
+	}
