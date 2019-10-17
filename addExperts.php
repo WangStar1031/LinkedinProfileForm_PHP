@@ -115,7 +115,7 @@
 					<h4>Filters</h4>
 				</div>
 				<div class="col-lg-12">
-					<input type="checkbox" name="hasEmail" id="hasEmail"> <label for="hasEmail"> Has Gmail Address</label><br>
+					<input type="checkbox" name="hasEmail" id="hasEmail"> <label for="hasEmail"> Has Email Address</label><br>
 					<input type="checkbox" name="hasPhone" id="hasPhone"> <label for="hasPhone"> Has Phone Number</label><br>
 					<input type="checkbox" name="rate" id="rate"> <label for="rate">Rate</label><span> $ <input type="number" name="fromSale"> to $ <input type="number" name="toSale"></span><br>
 					<input type="checkbox" name="signedTC" id="signedTC"> <label for="signedTC">Signed T&C</label><br>

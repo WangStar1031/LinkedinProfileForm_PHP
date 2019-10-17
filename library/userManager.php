@@ -442,6 +442,7 @@
 		$records = $db->select($sql . $where);
 		$retVal = [];
 		if( !$records)return $retVal;
+		print_r($strCompanies);
 		foreach ($records as $record) {
 			$profileId = $record['Id'];
 			if( $chkCompany == true){
@@ -468,6 +469,7 @@
 			$strBuff .= "'" . $CompanyName . "'";
 		}
 		$sql = "SELECT count(*) as count FROM employment WHERE ProfileId = '$profileId' AND CompanyName in (" . $strBuff . ")";
+		print_r($sql);
 		$ret = $db->select($sql);
 		if( $ret[0]['count'] == 0)return false;
 		return true;
