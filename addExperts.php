@@ -27,8 +27,8 @@
 	if( isset($_POST['project'])){
 		$strSearch = "";
 		if( isset($_POST['strSearch'])) $strSearch = $_POST['strSearch'];
-		$hasGmail = "";
-		if( isset($_POST['hasGmail'])) $hasGmail = $_POST['hasGmail'] == "on" ? "gmail.com" : "";
+		$hasEmail = "";
+		if( isset($_POST['hasEmail'])) $hasEmail = $_POST['hasEmail'] == "on" ? "gmail.com" : "";
 		$hasPhone = false;
 		if( isset($_POST['hasPhone'])) $hasPhone = $_POST['hasPhone'] == "on" ? true : false;
 		$rate = false;
@@ -55,7 +55,7 @@
 			$projectHistory = $_POST['projectHistory'] == "on" ? true : false;
 			if( isset($_POST['strProjectHistories'])) $strProjectHistories = $_POST['strProjectHistories'];
 		}
-		$profiles = SearchProfiles4Project( $id, $strSearch, $hasGmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories);
+		$profiles = SearchProfiles4Project( $id, $strSearch, $hasEmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories);
 		// print_r(count($profiles));
 		// echo "<br>";
 		// print_r($profiles);
@@ -64,9 +64,13 @@
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/mainProjects.css?<?= time();?>">
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-select.min.css">
+<!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" /> -->
 
 <script type="text/javascript" src="assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-select.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script> -->
 <style type="text/css">
 	.subSection{
 		margin-left: 30px;
@@ -98,7 +102,7 @@
 				<button class="btn btn-primary" style="float: right; margin-top: 5px;">Search</button>
 			<!-- </div> -->
 		</div>
-		<div class="row"></div>
+		<!-- <div class="row"></div> -->
 		<div class="col-lg-12">
 			<a href="javascript:void(0)" onclick="ShowHideFilters(this)" style="text-decoration: none;">Show filters</a>
 			<br>
@@ -107,11 +111,20 @@
 					<h4>Filters</h4>
 				</div>
 				<div class="col-lg-12">
-					<input type="checkbox" name="hasGmail" id="hasGmail"> <label for="hasGmail"> Has Gmail Address</label><br>
+					<input type="checkbox" name="hasEmail" id="hasEmail"> <label for="hasEmail"> Has Gmail Address</label><br>
 					<input type="checkbox" name="hasPhone" id="hasPhone"> <label for="hasPhone"> Has Phone Number</label><br>
 					<input type="checkbox" name="rate" id="rate"> <label for="rate">Rate</label><span> $ <input type="number" name="fromSale"> to $ <input type="number" name="toSale"></span><br>
 					<input type="checkbox" name="signedTC" id="signedTC"> <label for="signedTC">Signed T&C</label><br>
 					<input type="checkbox" name="chkCompany"> <label> Company </label> <span><input type="text" id="strCompany"></span> <span><div class="btn-primary btn" onclick="addCompany()">Add</div></span>
+
+      <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+        <option>Tom Foolery</option>
+        <option>Bill Gordon</option>
+        <option>Elizabeth Warren</option>
+        <option>Mario Flores</option>
+        <option>Don Young</option>
+        <option disabled="disabled">Marvin Martinez</option>
+      </select>
 					<input type="hidden" name="strCompanies">
 					<div id="companies" class="subSection"></div>
 
@@ -148,6 +161,56 @@
 			</div>
 		</div>
 	</form>
+	<div class="row result">
+		<?php
+		$index = 0;
+		foreach ($profiles as $profile) {
+			$index++;
+			$id = $profile['Id'];
+		?>
+		<div class="col-lg-12 profileSection">
+			<div class="row">
+				<h3 style="text-align: left;" class="col-lg-12"><?=$index?>) <?=$profile['FirstName'] . " " . $profile['LastName']?></h3>
+				<div class="col-lg-5 col-md-5">
+					<p><b><?=$profile['ProfileTitle']?></b></p>
+					<div><?=$profile['Biography']?></div>
+				</div>
+				<div class="col-lg-3 col-md-3">
+					<p><b>Job Experience</b></p>
+					<div>
+						<?php
+						foreach ($profile['employHistory'] as $job) {
+						?>
+						<div>
+							<div class="RoleTitle"><b>- <?=$job['RoleTitle']?></b></div>
+							<div class="CompanyName"><span><?=$job['CompanyName']?></span></div>
+							<div class="Period"><?=$job['FromDate']?> - <?=$job['ToDate']?></div>
+						</div>
+						<?php
+						}
+						?>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-2">
+					<p><b>Jobs Function : </b><?=$profile['JobFunction']?></p>
+					<p><b>Industry : </b><?=$profile['Industry']?></p>
+					<p><b>Geography : </b><?=$profile['Country']?></p>
+				</div>
+				<div class="col-lg-2 col-md-2">
+					<?php
+					$isSelected = false;
+					if( in_array($id, $profile['projectIds']))$isSelected = true;
+					?>
+					<button class="btn btn-danger RemoveFrom <?php if(!$isSelected) echo 'hideItem'?>">Remove</button>
+					<button class="btn btn-primary AddTo <?php if($isSelected) echo 'hideItem'?>">Add to Project</button>
+				</div>
+			</div>
+		</div>
+		<?php
+		}
+		?>
+		
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -225,7 +288,7 @@
 			arrBuff.push(chkedCountries.eq(i).attr("id"));
 		}
 		$("input[name=strCountries]").val(arrBuff.join(","));
-		
+
 		return true;
 	}
 </script>

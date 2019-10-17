@@ -358,7 +358,7 @@
 		$retStr .= "</table>";
 		return $retStr;
 	}
-	function SearchProfiles4Project( $id, $strSearch, $hasGmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories){
+	function SearchProfiles4Project( $id, $strSearch, $hasEmail, $hasPhone, $rate, $fromSale, $toSale, $signedTC, $chkCompany, $strCompanies, $chkGeograpy, $strCountries, $projectHistory, $strProjectHistories){
 		global $db;
 		$sql = "select * from profiles ";
 		$where = "where 1";
@@ -398,8 +398,8 @@
 			$intelWhere .= ")";
 			$where .= $intelWhere;
 		}
-		if( $hasGmail == true){
-			$where .= " and Email like '%@gmail.com'";
+		if( $hasEmail == true){
+			$where .= " and Email is not null";
 		}
 		if( $hasPhone == true){
 			$where .= " and PhoneNumber is not null";
@@ -411,7 +411,7 @@
 
 		}
 		if( $chkCompany == true){
-			
+
 		}
 		if( $chkGeograpy == true){
 			$arrCountries = explode(",", $strCountries);
@@ -430,7 +430,28 @@
 		// $count = $countRec[0]['count'];
 		// $where .= " limit " . (($_pageNum-1) * $_recCount) . "," . $_recCount;
 		// print_r($sql . $where);
-		$record = $db->select($sql . $where);
-		return $record;
+		$records = $db->select($sql . $where);
+		$retVal = [];
+		if( !$records)return $retVal;
+		foreach ($records as $record) {
+			$profileId = $record['Id'];
+			$empHist = getEmployHistory($profileId);
+			$record['employHistory'] = $empHist;
+			// $empHist = getEducationHistory($profileId);
+			// $record['educationHistory'] = $empHist;
+			$record['projectIds'] = getProjects4Profile($profileId);
+			$retVal[] = $record;
+		}
+		return $retVal;
+	}
+	function getProjects4Profile($profileId){
+		global $db;
+		$retVal = [];
+		$records = $db->select("SELECT projectId FROM experts_projects WHERE profileId = '$profileId'");
+		if( !$records)return $retVal;
+		foreach ($records as $record) {
+			$retVal[] = $record['projectId'];
+		}
+		return $retVal;
 	}
 ?>
