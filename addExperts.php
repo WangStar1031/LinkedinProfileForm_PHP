@@ -60,6 +60,7 @@
 		// echo "<br>";
 		// print_r($profiles);
 	}
+	$comNames = getAllCompanyNames();
 ?>
 <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
@@ -77,6 +78,9 @@
 	}
 	.hideItem{
 		display: none;
+	}
+	.btn.dropdown-toggle.selectpicker.btn-default{
+		color: black;
 	}
 </style>
 <div class="topBar col-lg-12">
@@ -97,10 +101,10 @@
 	<form class="row searchOptions" action="?project=<?=$id?>" method="POST" onsubmit="return checkForms()">
 		<input type="hidden" name="project" value="<?=$id?>">
 		<div class="col-lg-12">
-			<!-- <div class="row"> -->
+			<div class="row">
 				<input type="text" name="strSearch" placeholder="Type here to search" class="form-control" style="float: left;">
 				<button class="btn btn-primary" style="float: right; margin-top: 5px;">Search</button>
-			<!-- </div> -->
+			</div>
 		</div>
 		<!-- <div class="row"></div> -->
 		<div class="col-lg-12">
@@ -115,16 +119,24 @@
 					<input type="checkbox" name="hasPhone" id="hasPhone"> <label for="hasPhone"> Has Phone Number</label><br>
 					<input type="checkbox" name="rate" id="rate"> <label for="rate">Rate</label><span> $ <input type="number" name="fromSale"> to $ <input type="number" name="toSale"></span><br>
 					<input type="checkbox" name="signedTC" id="signedTC"> <label for="signedTC">Signed T&C</label><br>
-					<input type="checkbox" name="chkCompany"> <label> Company </label> <span><input type="text" id="strCompany"></span> <span><div class="btn-primary btn" onclick="addCompany()">Add</div></span>
+					<input type="checkbox" name="chkCompany" id="chkCompany"> <label for="chkCompany"> Company </label> <span>
+						<select class="selectpicker" data-show-subtext="true" data-live-search="true">
+							<?php
+							foreach ($comNames as $comName) {
+							?>
+						<option><?=$comName?></option>
+							<?php
+							}
+							?>
+						<!--         <option>Tom Foolery</option>
+						<option>Bill Gordon</option>
+						<option>Elizabeth Warren</option>
+						<option>Mario Flores</option>
+						<option>Don Young</option>
+						<option disabled="disabled">Marvin Martinez</option> -->
+						</select>
+					</span> <span><div class="btn-primary btn" onclick="addCompany()">Add</div></span>
 
-      <select class="selectpicker" data-show-subtext="true" data-live-search="true">
-        <option>Tom Foolery</option>
-        <option>Bill Gordon</option>
-        <option>Elizabeth Warren</option>
-        <option>Mario Flores</option>
-        <option>Don Young</option>
-        <option disabled="disabled">Marvin Martinez</option>
-      </select>
 					<input type="hidden" name="strCompanies">
 					<div id="companies" class="subSection"></div>
 
@@ -166,9 +178,9 @@
 		$index = 0;
 		foreach ($profiles as $profile) {
 			$index++;
-			$id = $profile['Id'];
+			$profileId = $profile['Id'];
 		?>
-		<div class="col-lg-12 profileSection">
+		<div class="col-lg-12 profileSection" profileId="<?=$profileId?>">
 			<div class="row">
 				<h3 style="text-align: left;" class="col-lg-12"><?=$index?>) <?=$profile['FirstName'] . " " . $profile['LastName']?></h3>
 				<div class="col-lg-5 col-md-5">
@@ -201,8 +213,8 @@
 					$isSelected = false;
 					if( in_array($id, $profile['projectIds']))$isSelected = true;
 					?>
-					<button class="btn btn-danger RemoveFrom <?php if(!$isSelected) echo 'hideItem'?>">Remove</button>
-					<button class="btn btn-primary AddTo <?php if($isSelected) echo 'hideItem'?>">Add to Project</button>
+					<button class="btn btn-danger RemoveFrom <?php if(!$isSelected) echo 'hideItem'?>" onclick="RemoveExpertToProject(this)">Remove</button>
+					<button class="btn btn-primary AddTo <?php if($isSelected) echo 'hideItem'?>" onclick="AddExpertToProject(this)">Add to Project</button>
 				</div>
 			</div>
 		</div>
@@ -247,21 +259,27 @@
 			$(_this).parent().find("div.subSection").addClass("hideItem");
 		}
 	}
+	var lstCompanies = [];
+	function removeCompany(_this){
+		var curCompany = $(_this).parent().find(".comName").text();
+		lstCompanies.splice(lstCompanies.indexOf(curCompany), 1);
+		$(_this).parent().parent().remove();
+	}
 	function addCompany(){
-		var lstCompanies = [];
-		var strBuf = $("#companies").html();
-		if( strBuf)
-			lstCompanies = strBuf.split(", ");
-		var curCompany = $("#strCompany").val();
-		if( !curCompany)return;
-		$("#strCompany").val("");
-		$("#strCompany").focus();
-		if( lstCompanies.indexOf(curCompany) != -1){
-			return false;
+		var curCompany = $("div.bootstrap-select span.filter-option").text();
+		if( curCompany == "Nothing selected"){
+			return;
 		}
-		lstCompanies.push( curCompany);
-		$("#companies").html(lstCompanies.join(", "));
-		return false;
+		if( lstCompanies.indexOf(curCompany) != -1){
+			return;
+		}
+		var strHtml = "";
+		strHtml += "<div class='subSection Company btn'>";
+			strHtml += "<div><span class='comName'>" + curCompany + "</span> <a href='javascript:void(0)' onclick='removeCompany(this)'><span class='btn-danger'>x</span></a></div>";
+		strHtml += "</div>";
+		$("#companies").append(strHtml);
+		lstCompanies.push(curCompany);
+		return;
 	}
 	function addProjectHistory(){
 		var lstHistories = [];
@@ -280,7 +298,7 @@
 		return false;
 	}
 	function checkForms(){
-		$("input[name=strCompanies]").val($("#companies").html());
+		$("input[name=strCompanies]").val(lstCompanies.join(","));
 		$("input[name=strProjectHistories]").val($("#histories").html());
 		var chkedCountries = $(".country input:checked");
 		var arrBuff = [];
@@ -290,6 +308,25 @@
 		$("input[name=strCountries]").val(arrBuff.join(","));
 
 		return true;
+	}
+	function RemoveExpertToProject(_this){
+		var id = $(_this).parent().parent().parent().attr("profileId");
+		$.post("api_getProfiles.php", {case: "removeExpert", projectId: "<?=$id?>", profileId: id}, function(data){
+				if( data == "yes"){
+					$(_this).addClass("hideItem");
+					$(_this).parent().find(".AddTo").removeClass("hideItem")
+				}
+			});
+	}
+	function AddExpertToProject(_this){
+		var id = $(_this).parent().parent().parent().attr("profileId");
+		console.log(id);
+		$.post("api_getProfiles.php", {case: "addExperts", projectId: "<?=$id?>", ids: id}, function(data){
+				if( data == "yes"){
+					$(_this).addClass("hideItem");
+					$(_this).parent().find(".RemoveFrom").removeClass("hideItem");
+				}
+			});
 	}
 </script>
 

@@ -64,11 +64,14 @@
 		global $db;
 		$strsql = "DELETE FROM profiles WHERE Id='$profileId'";
 		$db->__exec__($strsql);
+		$db->__exec__("DELETE FROM education WHERE ProfileId = '$profileId'");
+		$db->__exec__("DELETE FROM employment WHERE ProfileId = '$profileId'");
+		$db->__exec__("DELETE FROM experts_projects WHERE profileId = '$profileId'");
 	}
 	function removeProfile($_profileUrl){
 		global $db;
-		$strsql = "delete from profiles where ProfileUrl='$_profileUrl'";
-		$db->__exec__($strsql);
+		$profileId = getProfileId4Url($_profileUrl);
+		removeProfileWithId($profileId);
 	}
 	function verifyUser($_email, $_pass) {
 		global $db;
@@ -84,6 +87,15 @@
 		return 0;
 	}
 
+	function getProfileId4Url( $profile){
+		global $db;
+		$sql = "select Id from profiles where ProfileUrl='" . $profile . "'";
+		$record = $db->select($sql);
+		if( $record){
+			return $record[0]["Id"];
+		}
+		return false;
+	}
 	function getProfileId($userId, $profile){
 		global $db;
 		$sql = "select Id from profiles where UserId=" . $userId . " and ProfileUrl='" . $profile . "'";
@@ -410,9 +422,6 @@
 		if( $signedTC == true){
 
 		}
-		if( $chkCompany == true){
-
-		}
 		if( $chkGeograpy == true){
 			$arrCountries = explode(",", $strCountries);
 			if( count($arrCountries) != 0){
@@ -435,6 +444,10 @@
 		if( !$records)return $retVal;
 		foreach ($records as $record) {
 			$profileId = $record['Id'];
+			if( $chkCompany == true){
+				if( !isWorkedInCompany($profileId, $strCompanies))
+					continue;
+			}
 			$empHist = getEmployHistory($profileId);
 			$record['employHistory'] = $empHist;
 			// $empHist = getEducationHistory($profileId);
@@ -444,6 +457,21 @@
 		}
 		return $retVal;
 	}
+	function isWorkedInCompany($profileId, $strCompanies){
+		global $db;
+		$arrCompanies = explode(",", $strCompanies);
+		$strBuff = "";
+		for($i = 0; $i < count($arrCompanies); $i++) {
+			$CompanyName = $arrCompanies[$i];
+			if( $i != 0)
+				$strBuff .= ",";
+			$strBuff .= "'" . $CompanyName . "'";
+		}
+		$sql = "SELECT count(*) as count FROM employment WHERE ProfileId = '$profileId' AND CompanyName in (" . $strBuff . ")";
+		$ret = $db->select($sql);
+		if( $ret[0]['count'] == 0)return false;
+		return true;
+	}
 	function getProjects4Profile($profileId){
 		global $db;
 		$retVal = [];
@@ -451,6 +479,16 @@
 		if( !$records)return $retVal;
 		foreach ($records as $record) {
 			$retVal[] = $record['projectId'];
+		}
+		return $retVal;
+	}
+	function getAllCompanyNames(){
+		global $db;
+		$records = $db->select("SELECT DISTINCT CompanyName FROM employment ORDER BY CompanyName ASC");
+		$retVal = [];
+		if( !$records) return $retVal;
+		foreach ($records as $record) {
+			$retVal[] = $record['CompanyName'];
 		}
 		return $retVal;
 	}
