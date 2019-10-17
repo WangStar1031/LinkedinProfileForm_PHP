@@ -25,6 +25,7 @@
 		<span class="topTitle"><strong>Nodes</strong></span>
 	</a>
 	<div class="topUserInfo">
+		<a href="main.php">Profiles &nbsp;&nbsp;<span><i class="fa fa-angle-double-right"></i></span></a>&nbsp;&nbsp;
 		<a href="logout.php">Log Out &nbsp;&nbsp;<span><i class="fa fa-sign-out"></i></span></a>
 	</div>
 </div>
