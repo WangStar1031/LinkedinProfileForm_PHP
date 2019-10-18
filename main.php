@@ -85,7 +85,8 @@ include("assets/components/header.php");
 <div class="mainProfiles col-lg-12">
 	<div class="row">
 		<div class="mainTitle col-lg-12">
-			<h2>Profiles</h2>
+			<h2>Profiles<a href="createProfile.php" style="float: right;"><button class="btn btn-primary"> + New Profile</button></a></h2>
+
 		</div>
 		<div class="searchOptions col-lg-12">
 			<form class="searchForm" method="POST">
