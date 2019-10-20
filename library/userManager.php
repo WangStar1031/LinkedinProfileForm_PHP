@@ -105,7 +105,56 @@
 		}
 		return false;
 	}
+	function saveManProfile($email, $profile){
+		$prefix = $profile->prefix;
+		$FirstName = $profile->FirstName;
+		$LastName = $profile->LastName;
+		$Suffix = $profile->Suffix;
+		$Country = $profile->Country;
+		$TimeZone = $profile->TimeZone;
+		$RefferedBy = $profile->RefferedBy;
+		$Email = $profile->Email;
+		$PhoneNumber = $profile->PhoneNumber;
+		$JobFunction = $profile->JobFunction;
+		$LinedinUrl = $profile->LinedinUrl;
+		$JobProfileUrl = $profile->JobProfileUrl;
+		$Biography = $profile->Biography;
 
+		$userId = getUserId($email);
+		if( $userId == false)
+			return false;
+		global $db;
+		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Suffix, Country, TimeZone, RefferedBy, Email, PhoneNumber, JobFunction, ProfileUrl, JobProfileUrl, Biography) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$stmt = $db->prepare($sql);
+		$stmt-> execute([$userId, $prefix, $FirstName, $LastName, $Suffix, $Country, $TimeZone, $RefferedBy, $Email, $PhoneNumber, $JobFunction, $LinedinUrl, $JobProfileUrl, $Biography]);
+
+		$ProfileId = $db->lastInsertId();
+		if( !$ProfileId )return false;
+
+		$arrEmploys = $profile->arrEmploys;
+		foreach ($arrEmploys as $employment) {
+			$CompanyName = $employment->CompanyName;
+			$RoleTitle = $employment->RoleTitle;
+			$FromDate = $employment->FromDate;
+			$ToDate = $employment->ToDate;
+			$sql = "INSERT INTO employment(ProfileId, CompanyName, RoleTitle, FromDate, ToDate) VALUES(?, ?, ?, ?, ?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$ProfileId, $CompanyName, $RoleTitle, $FromDate, $ToDate]);
+ 		}
+
+		$arrEducations = $profile->arrEducations;
+		foreach ($arrEducations as $education) {
+			$SchoolName = $education->SchoolName;
+			$DegreeName = $education->DegreeName;
+			$AreaName = $education->AreaName;
+			$StartYear = $education->StartYear;
+			$EndYear = $education->EndYear;
+			$sql = "INSERT INTO education(ProfileId, SchoolName, DegreeName, AreaName, StartYear, EndYear) VALUES(?, ?, ?, ?, ?, ?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute([$ProfileId, $SchoolName, $DegreeName, $AreaName, $StartYear, $EndYear]);
+ 		}
+ 		return true;
+	}
 	function saveProfile($_email, $_profile){
 		$userId = getUserId($_email);
 		if( $userId == false)

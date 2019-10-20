@@ -54,6 +54,18 @@
 			}
 			// echo $verifyResult;
 		break;
+		case 'manProfile':
+			$data = '';
+			if( isset($_GET['data'])) $data = $_GET['data'];
+			if( isset($_POST['data'])) $data = $_POST['data'];
+			$profile = json_decode($data);
+			$ret = saveManProfile($email, $profile);
+			if( $ret == true){
+				echo "Inserted";
+			} else{
+				echo "No";
+			}
+		break;
 		case 'profiles':
 			$data = '';
 			if( isset($_GET['data'])) $data = $_GET['data'];

@@ -13,8 +13,11 @@
 	text-decoration: none;
 	color: white;
 }
+.topBar .topTitle strong{
+	display: none;
+}
 .topBar img, .topBar .topUserAvatar img{
-	width: 40px;
+	height: 40px;
 }
 .topBar .topUserInfo{
 	cursor: pointer;
