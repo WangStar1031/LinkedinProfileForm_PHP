@@ -74,7 +74,7 @@ include("assets/components/header.php");
 
 <div class="topBar col-lg-12">
 	<a href="main.php">
-		<img src="assets/imgs/vision-logo.png">
+		<img src="assets/imgs/vision-logo-1.png">
 		<span class="topTitle"><strong>Nodes</strong></span>
 	</a>
 	<div class="topUserInfo">
@@ -180,7 +180,7 @@ include("assets/components/header.php");
 					</span>
 					</div>
 					<h5>Biography</h5>
-					<div onclick="BiographyClicked(this)"><span class="biography"><?=$biography?></span><textarea class="HideItem"></textarea></div>
+					<div onclick="BiographyClicked(this)" style="min-height: 50px;"><span class="biography"><?=$biography?></span><textarea class="HideItem"></textarea></div>
 				</td>
 				<td>
 					<h5>Job Experience</h5>
@@ -202,6 +202,7 @@ include("assets/components/header.php");
 					<p><b>Industry : </b><?=$industry?></p>
 					<p><b>Geography : </b><?=$country?></p>
 					<button class="btn btn-disable" onclick="btnSaveClicked(this)">Save</button>
+					<a href="editProfile.php?profile=<?=$profileId?>"><button class="btn btn-success">Edit</button></a>
 					<button class="btn btn-danger" onclick="removeProfile('<?=$profileId?>')">Remove</button>
 				</td>
 			</tr>
