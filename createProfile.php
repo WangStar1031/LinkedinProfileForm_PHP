@@ -19,8 +19,6 @@
 <link rel="stylesheet" type="text/css" href="assets/css/topbar.css?<?= time();?>">
 <link rel="stylesheet" type="text/css" href="assets/css/mainProjects.css?<?= time();?>">
 
-<script src="assets/js/jquery.min.js"></script>
-
 <style type="text/css">
 	.requiredField:after{
 		content: "*";

@@ -116,7 +116,6 @@
 	</form>
 </div>
 
-<script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
 	function addQuestion(txtQuestion){
 		var lstQuestions = $("#lstQuestions > div");

@@ -22,8 +22,6 @@ if( isset($_POST['email_name'])){
 <?php
 include("assets/components/header.php");
 ?>
-<script src="assets/js/jquery.min.js"></script>
-<!-- <script src="assets/js/bootstrap.min.js"></script> -->
 
 <body>
 <main class="auth-main">

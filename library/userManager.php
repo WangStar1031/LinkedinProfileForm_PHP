@@ -124,7 +124,7 @@
 		if( $userId == false)
 			return false;
 		global $db;
-		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Suffix, Country, TimeZone, RefferedBy, Email, PhoneNumber, JobFunction, ProfileUrl, JobProfileUrl, Biography) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Suffix, Country, TimeZone, RefferedBy, Email, PhoneNumber, JobFunction, ProfileUrl, JobProfileUrl, Biography, Created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now())";
 		$stmt = $db->prepare($sql);
 		$stmt-> execute([$userId, $prefix, $FirstName, $LastName, $Suffix, $Country, $TimeZone, $RefferedBy, $Email, $PhoneNumber, $JobFunction, $LinedinUrl, $JobProfileUrl, $Biography]);
 
@@ -181,7 +181,7 @@
 			$stmt = $db->prepare($sql);
 			$stmt->execute([ $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $imgUrl, $profileTitle, $biography, $userId, $profile]);
 		} else{
-			$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Country, Email, PhoneNumber, Industry, JobFunction, ProfileUrl, ImageUrl, ProfileTitle, Biography, Created) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now())";
 			$stmt = $db->prepare($sql);
 			$stmt->execute([$userId, $prefix, $firstName, $lastName, $country, $email, $phoneNumber, $industry, $jobFunction, $profile, $imgUrl, $profileTitle, $biography]);
 		}
@@ -378,7 +378,14 @@
 	}
 	function getProfileFromId($_id){
 		global $db;
-		return $db->select("SELECT * FROM profiles WHERE Id = '$_id'");
+		$records = $db->select("SELECT * FROM profiles WHERE Id = '$_id'");
+		if( !$records) return false;
+		if( count($records) == 0) return false;
+		$profile = $records[0];
+		$profile['employHistory'] = getEmployHistory($_id);
+		$profile['educationHistory'] = getEducationHistory($_id);
+
+		return $profile;
 	}
 	function getProfiles($_email, $_pageNum = 0, $_offset = 20){
 		global $db;

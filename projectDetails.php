@@ -118,7 +118,7 @@
 			foreach ($experts as $curExpert) {
 				$i++;
 				$profileId = $curExpert['profileId'];
-				$expertProfile = getProfileFromId($profileId)[0];
+				$expertProfile = getProfileFromId($profileId);
 			?>
 			<div profileId="<?=$profileId?>" class="col-lg-12 profileSection <?= $i%2?'odd':''?>">
 				<div class="row">

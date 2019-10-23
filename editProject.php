@@ -158,7 +158,6 @@
 	</form>
 </div>
 
-<script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
 	$(".delQuestion").click(function(){
 		$(this).parent().remove();

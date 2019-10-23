@@ -202,7 +202,8 @@ include("assets/components/header.php");
 					<p><b>Industry : </b><?=$industry?></p>
 					<p><b>Geography : </b><?=$country?></p>
 					<button class="btn btn-disable" onclick="btnSaveClicked(this)">Save</button>
-					<a href="editProfile.php?profile=<?=$profileId?>"><button class="btn btn-success">Edit</button></a>
+					<!-- <a href="editProfile.php?profile=<?=$profileId?>"><button class="btn btn-success">Edit</button></a> -->
+					<a href="profile.php?profile=<?=$profileId?>"><button class="btn btn-success">View</button></a>
 					<button class="btn btn-danger" onclick="removeProfile('<?=$profileId?>')">Remove</button>
 				</td>
 			</tr>
@@ -215,8 +216,6 @@ include("assets/components/header.php");
 	</div>
 </div>
 
-
-<script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
 	function pageClicked(_this){
 		var pageNum = $(_this).text();

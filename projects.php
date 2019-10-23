@@ -65,7 +65,8 @@
 					$experts = getProjectExperts($projectId);
 					$strExperts = [];
 					foreach ($experts as $profileId) {
-						$profile = getProfileFromId($profileId)[0];
+						$profile = getProfileFromId($profileId);
+						if( !$profile)continue;
 						$strExperts[] = $profile['FirstName'] . " " . $profile['LastName'];
 					}
 				?>
@@ -83,7 +84,6 @@
 	</div>
 </div>
 
-<script src="assets/js/jquery.min.js"></script>
 <script type="text/javascript">
 	$(".searchForm .searchIcon").click(function(){
 		console.log("icon clicked.");
