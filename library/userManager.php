@@ -105,7 +105,7 @@
 		}
 		return false;
 	}
-	function saveManProfile($email, $profile){
+	function saveManProfile($email, $profile, $profileId = 0){
 		$prefix = $profile->prefix;
 		$FirstName = $profile->FirstName;
 		$LastName = $profile->LastName;
@@ -124,11 +124,23 @@
 		if( $userId == false)
 			return false;
 		global $db;
-		$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Suffix, Country, TimeZone, RefferedBy, Email, PhoneNumber, JobFunction, ProfileUrl, JobProfileUrl, Biography, Created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now())";
+		if( $profileId == 0){
+			$sql = "INSERT INTO profiles(UserId, Prefix, FirstName, LastName, Suffix, Country, TimeZone, RefferedBy, Email, PhoneNumber, JobFunction, ProfileUrl, JobProfileUrl, Biography, Created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now())";
+		} else{
+			$sql = "UPDATE profiles SET UserId=?, Prefix=?, FirstName=?, LastName=?, Suffix=?, Country=?, TimeZone=?, RefferedBy=?, Email=?, PhoneNumber=?, JobFunction=?, ProfileUrl=?, JobProfileUrl=?, Biography=? WHERE Id=?";
+		}
 		$stmt = $db->prepare($sql);
-		$stmt-> execute([$userId, $prefix, $FirstName, $LastName, $Suffix, $Country, $TimeZone, $RefferedBy, $Email, $PhoneNumber, $JobFunction, $LinedinUrl, $JobProfileUrl, $Biography]);
-
-		$ProfileId = $db->lastInsertId();
+		if( $profileId == 0){
+			$stmt-> execute([$userId, $prefix, $FirstName, $LastName, $Suffix, $Country, $TimeZone, $RefferedBy, $Email, $PhoneNumber, $JobFunction, $LinedinUrl, $JobProfileUrl, $Biography]);
+			$ProfileId = $db->lastInsertId();
+		} else{
+			$stmt-> execute([$userId, $prefix, $FirstName, $LastName, $Suffix, $Country, $TimeZone, $RefferedBy, $Email, $PhoneNumber, $JobFunction, $LinedinUrl, $JobProfileUrl, $Biography, $profileId]);
+			$strsql = "DELETE FROM employment WHERE ProfileId='$profileId'";
+			$db->__exec__($strsql);
+			$strsql = "DELETE FROM education WHERE ProfileId='$profileId'";
+			$db->__exec__($strsql);
+			$ProfileId = $profileId;
+		}
 		if( !$ProfileId )return false;
 
 		$arrEmploys = $profile->arrEmploys;

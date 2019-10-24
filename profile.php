@@ -181,17 +181,33 @@
 					<h5>Rate : </h5>
 					<div><?=$profile['Rate'] ? $profile['Rate'] : 0?>$/hr</div>
 					<h5>T&C Signed on : </h5>
-					<div><?=$profile['TCSigned'] ? $profile['TCSigned'] : 0?>$/hr</div>
+					<div><?=$profile['TCSigned'] ? $profile['TCSigned'] : 0?></div>
 					<h5>Created on : </h5>
-					<div><?=$profile['Created'] ? $profile['Created'] : 0?>$/hr</div>
+					<div><?=$profile['Created'] ? $profile['Created'] : 0?></div>
 				</div>
 				<div class="col-lg-7 col-md-7">
-					<h5>Tools</h5>
-					<a href=""><button class="btn btn-primary">Edit Page</button></a>
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" 
+          data-toggle="dropdown">
+    <!-- <i class="glyphicon glyphicon-cog"></i> -->
+    Tools
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+  	<li><a href="editProfile.php?profile=<?=$id?>">Edit Page</a></li>
+  	<li><a href="#">Send PW reset email</a></li>
+  	<li><a href="#">Email T&C</a></li>
+  	<li><a href="#">Send bio update email</a></li>
+  	<li><a href="#">Upload resume</a></li>
+  </ul>
+</div>
+					<!-- <h5>Tools</h5>
+					<a href="editProfile.php?profile=<?=$id?>"><button class="btn btn-primary">Edit Page</button></a>
 					<a href=""><button class="btn btn-primary">Send PW reset email</button></a>
 					<a href=""><button class="btn btn-primary">Email T&C</button></a>
 					<a href=""><button class="btn btn-primary">Send bio update email</button></a>
-					<a href=""><button class="btn btn-primary">Upload resume</button></a>
+					<a href=""><button class="btn btn-primary">Upload resume</button></a> -->
 				</div>
 			</div>
 			<div class="row">
