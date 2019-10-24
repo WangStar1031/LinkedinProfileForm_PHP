@@ -202,18 +202,11 @@
   	<li><a href="#">Upload resume</a></li>
   </ul>
 </div>
-					<!-- <h5>Tools</h5>
-					<a href="editProfile.php?profile=<?=$id?>"><button class="btn btn-primary">Edit Page</button></a>
-					<a href=""><button class="btn btn-primary">Send PW reset email</button></a>
-					<a href=""><button class="btn btn-primary">Email T&C</button></a>
-					<a href=""><button class="btn btn-primary">Send bio update email</button></a>
-					<a href=""><button class="btn btn-primary">Upload resume</button></a> -->
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
 					<h5>Job History</h5>
-					<!-- <?=print_r($profile['employHistory']);?> -->
 					<?php
 					foreach ($profile['employHistory'] as $employ) {
 					?>
@@ -225,6 +218,15 @@
 					<?php
 					}
 					?>
+				</div>
+				<div class="col-lg-12">
+					<h5>Contact Info</h5>
+					<label>Email : </label><a href="mailto:<?=$profile['Email']?>"><?=$profile['Email']?></a><br>
+					<label>Phone1 : </label><?=$profile['PhoneNumber']?><br>
+					<!-- <label>Phone2 : </label><br> -->
+					<label>Linkedin Url : </label><a href="<?=$profile['ProfileUrl']?>" target="_blank"><?=$profile['ProfileUrl']?></a><br>
+					<label>Country : </label><span><?=$profile['Country']?></span><br>
+					<label>TimeZone : </label><span><?=$profile['TimeZone']?></span>
 				</div>
 			</div>
 		</div>
