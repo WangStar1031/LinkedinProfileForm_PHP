@@ -169,7 +169,7 @@
 							</tr>
 							<tr>
 								<td><b>Phone2:</b></td>
-								<td><input type="text" name="phone2" class="form-control" value="<?=$curExpert['phone2']?>"></td>
+								<td><input type="text" name="phone2" class="form-control" value="<?=$expertProfile['PhoneNumber2']?>"></td>
 							</tr>
 							<tr>	
 								<td><b>Email:</b></td>
@@ -189,7 +189,7 @@
 						?>
 						<div><b>Sale:</b> <?=$curExpert['sale']?></div>
 						<div><b>Phone:</b> <?=$expertProfile['PhoneNumber']?></div>
-						<div><b>Phone2:</b> <?=$curExpert['phone2']?></div>
+						<div><b>Phone2:</b> <?=$expertProfile['PhoneNumber2']?></div>
 						<div><b>Email:</b> <?=$expertProfile['Email']?></div>
 						<div><b>Linkedin:</b> <a href="<?=$expertProfile['ProfileUrl']?>" target="_blank"><?=$expertProfile['ProfileUrl']?></a></div>
 						<div><b>Location:</b> <?=$expertProfile['Country']?></div>

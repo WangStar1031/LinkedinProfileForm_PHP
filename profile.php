@@ -44,6 +44,12 @@
 	$arrTypes = ["Consultation", "Qualitrics Survey"];
 ?>
 <style type="text/css">
+	.searchBar{
+		margin-top: 20px;
+	}
+	hr{
+		border: 1px solid gray;
+	}
 	.searchBar input{
 		height: 32px;
 		border-radius: 5px;
@@ -80,7 +86,14 @@
 	.checkbox-menu li.active label:focus {
 		background-color: #b8b8ff;
 	}
-
+	.mainTitle{
+		padding-bottom: 10px;
+		border-bottom: 2px solid gray;
+		margin-top: 20px;
+	}
+	.context{
+		font-size: 0.8em;
+	}
 </style>
 <div class="col-lg-12">
 	<div class="row">
@@ -89,14 +102,13 @@
 			<h4><?=$profile['ProfileTitle']?></h4>
 		</div>
 		<div class="col-lg-8 col-md-8">
-			<h5>Biography</h5>
-			<div><?=$profile['Biography']?></div>
+			<h4 class="mainTitle">Biography</h4>
+			<div style="font-family: serif;"><?=$profile['Biography']?></div>
 			<div class="projectHistory">
 				<div class="row">
-
 					<div class="col-lg-12 searchBar">
-						<h5>Project History
-							<span style="float: right;">
+						<h4>Project History
+							<span style="float: right; font-size: 1.2rem;">
 								<input type="date" name="" value="<?=date('Y-m-d', strtotime('-2 year'))?>">
 								<input type="date" name="" value="<?=date('Y-m-d')?>">&nbsp;&nbsp;
 								<input type="number" name="" style="max-width: 4rem;" value="5"> per page &nbsp;&nbsp;
@@ -104,7 +116,7 @@
 								Page <input type="number" name="" style="max-width: 4rem;" value="1"> of 25 
 								<button class="btn">></button>
 							</span>
-						</h5>
+						</h4>
 					</div>
 					<div class="row"></div>
 					<div class="col-lg-12">
@@ -178,21 +190,18 @@
 		<div class="col-lg-4 col-md-4">
 			<div class="row">
 				<div class="col-lg-5 col-md-5">
-					<h5>Rate : </h5>
+					<h4>Rate : </h4>
 					<div><?=$profile['Rate'] ? $profile['Rate'] : 0?>$/hr</div>
-					<h5>T&C Signed on : </h5>
+					<h4>T&C Signed on : </h4>
 					<div><?=$profile['TCSigned'] ? $profile['TCSigned'] : 0?></div>
-					<h5>Created on : </h5>
+					<h4>Created on : </h4>
 					<div><?=$profile['Created'] ? $profile['Created'] : 0?></div>
 				</div>
 				<div class="col-lg-7 col-md-7">
 
 <div class="dropdown">
   <button class="btn btn-primary dropdown-toggle" type="button" 
-          data-toggle="dropdown">
-    <!-- <i class="glyphicon glyphicon-cog"></i> -->
-    Tools
-    <span class="caret"></span>
+          data-toggle="dropdown"> Tools &nbsp; &nbsp;&nbsp;<span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
   	<li><a href="editProfile.php?profile=<?=$id?>">Edit Page</a></li>
@@ -206,7 +215,7 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
-					<h5>Job History</h5>
+					<h4 class="mainTitle">Job History</h4>
 					<?php
 					foreach ($profile['employHistory'] as $employ) {
 					?>
@@ -220,14 +229,23 @@
 					?>
 				</div>
 				<div class="col-lg-12">
-					<h5>Contact Info</h5>
-					<label>Email : </label><a href="mailto:<?=$profile['Email']?>"><?=$profile['Email']?></a><br>
-					<label>Phone1 : </label><?=$profile['PhoneNumber']?><br>
-					<!-- <label>Phone2 : </label><br> -->
-					<label>Linkedin Url : </label><a href="<?=$profile['ProfileUrl']?>" target="_blank"><?=$profile['ProfileUrl']?></a><br>
-					<label>Country : </label><span><?=$profile['Country']?></span><br>
-					<label>TimeZone : </label><span><?=$profile['TimeZone']?></span>
+					<h4 class="mainTitle">Contact Info</h4>
+					<label><?=$profile['FirstName']?> <?=$profile['LastName']?></label>
+					<div class="context">Legal Name</div>
+					<label><a href="mailto:<?=$profile['Email']?>"><i class="fa fa-envelope"></i>&nbsp;&nbsp;<?=$profile['Email']?></a></label>
+					<div class="context">Email</div>
+					<label><?=$profile['PhoneNumber']==""?'-':$profile['PhoneNumber']?></label>
+					<div class="context">Phone</div>
+					<label><?=$profile['PhoneNumber2']==""?'-':$profile['PhoneNumber2']?></label>
+					<div class="context">Cell Phone</div>
+					<label><a href="<?=$profile['ProfileUrl']?>" target="_blank"><i class="fa fa-linkedin-square"></i> <?=$profile['ProfileUrl']==""?"-":$profile['ProfileUrl']?></a></label>
+					<div class="context">Linkedin Url</div>
+					<label><?=$profile['Country'] == "" ? '-' : $profile['Country']?></label>
+					<div class="context">Country</div>
+					<label><?=$profile['TimeZone'] == "" ? '-' : $profile['TimeZone']?></label>
+					<div class="context">Time Zone</div>
 				</div>
+				<br>
 			</div>
 		</div>
 	</div>

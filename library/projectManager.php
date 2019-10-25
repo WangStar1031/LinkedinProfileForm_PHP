@@ -238,13 +238,13 @@
 			$ProfileUrl = $curExpert->ProfileUrl;
 			$Country = $curExpert->Country;
 			
-			$sql = "UPDATE profiles SET Country=?, Email=?, ProfileUrl=?, PhoneNumber=? WHERE Id=?";
+			$sql = "UPDATE profiles SET Country=?, Email=?, ProfileUrl=?, PhoneNumber=?, PhoneNumber2=? WHERE Id=?";
 			$stmt= $db->prepare($sql);
-			$stmt->execute([$Country, $Email, $ProfileUrl, $PhoneNumber, $profileId]);
+			$stmt->execute([$Country, $Email, $ProfileUrl, $PhoneNumber, $PhoneNumber2, $profileId]);
 
-			$sql = "UPDATE experts_projects SET projectStatus=?, sale=?, phone2=? WHERE projectId=? AND profileId=?";
+			$sql = "UPDATE experts_projects SET projectStatus=?, sale=? WHERE projectId=? AND profileId=?";
 			$stmt= $db->prepare($sql);
-			$stmt->execute([$projectStatus, $sale, $phone2, $projectId, $profileId]);
+			$stmt->execute([$projectStatus, $sale, $projectId, $profileId]);
 		}
 		return "yes";
 	}
