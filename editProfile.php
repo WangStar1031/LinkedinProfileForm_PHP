@@ -317,7 +317,7 @@
 								<input type="text" name="DegreeName" class="form-control" value="<?=$value['DegreeName']?>">
 							</div>
 							<div class="col-lg-4 col-md-4">
-								<label class="requiredField">Area Name</label>
+								<label class="">Area Name</label>
 								<input type="text" name="AreaName" class="form-control" value="<?=$value['AreaName']?>">
 							</div>
 							<div class="col-lg-4 col-md-4">
@@ -457,7 +457,7 @@
 			var curEmp = Educations.eq(i);
 			curEmp.find("input[name=SchoolName]").css("border", "1px solid #ccc");
 			curEmp.find("input[name=DegreeName]").css("border", "1px solid #ccc");
-			curEmp.find("input[name=AreaName]").css("border", "1px solid #ccc");
+			// curEmp.find("input[name=AreaName]").css("border", "1px solid #ccc");
 			curEmp.find("input[name=StartYear]").css("border", "1px solid #ccc");
 			curEmp.find("input[name=EndYear]").css("border", "1px solid #ccc");
 		}
@@ -546,10 +546,10 @@
 				curEdu.find("input[name=DegreeName]").css("border", "1px solid red");
 			}
 			var curAreaName = curEdu.find("input[name=AreaName]").val();
-			if( !curAreaName){
-				canBeSubmit = false;
-				curEdu.find("input[name=AreaName]").css("border", "1px solid red");
-			}
+			// if( !curAreaName){
+			// 	canBeSubmit = false;
+			// 	curEdu.find("input[name=AreaName]").css("border", "1px solid red");
+			// }
 			var curStartYear = curEdu.find("input[name=StartYear]").val();
 			if( !curStartYear){
 				canBeSubmit = false;
