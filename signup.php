@@ -9,7 +9,7 @@ if( isset($_POST['email_name'])){
 	$email_name = $_POST['email_name'];
 	$password = $_POST['password'];
 	$_firstName = $_POST['first_name'];
-	$_lastName = $_POST['first_name'];
+	$_lastName = $_POST['last_name'];
 	$ret = registerUser($_firstName, $_lastName, $email_name, $password);
 	if( $ret != false){
 		header("Location: index.php");
